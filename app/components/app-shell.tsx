@@ -48,6 +48,15 @@ export function AppShell({
           <strong>CPSC</strong>
           <span className="brand-full">Competitive Programming Snippet Collection</span>
         </Link>
+        <a
+          className="github-link"
+          href="https://github.com/k0michi/cpsc"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="k0michi/cpscをGitHubで開く"
+        >
+          k0michi/cpsc ↗
+        </a>
       </header>
       <div className="workspace">
         <aside className="sidebar">

@@ -32,6 +32,8 @@
 .brand{display:flex;align-items:center;gap:12px;font-family:monospace;letter-spacing:0}
 .brand strong{font-size:16px;line-height:1;letter-spacing:.08em}
 .brand-full{border-left:1px solid var(--line);padding-left:12px;font-size:10px;font-weight:400;color:#777;letter-spacing:.025em}
+.topbar .github-link{margin-left:auto;color:var(--muted);font:500 10px/1 monospace;letter-spacing:.025em;border-bottom:1px solid var(--line);padding-bottom:3px}
+.topbar .github-link:hover{color:var(--ink);border-color:var(--ink)}
 .top-meta{margin-left:auto;margin-right:0;font-weight:400;text-transform:none;letter-spacing:0}
 .workspace{grid-template-columns:260px minmax(0,1fr)}
 .sidebar{height:100vh;top:0;padding:16px 12px;border-color:var(--line)}
