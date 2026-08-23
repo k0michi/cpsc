@@ -1,0 +1,69 @@
+name: Test and publish
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cpp-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Configure CMake
+        run: cmake -S . -B build-cpp -DCMAKE_BUILD_TYPE=Release
+      - name: Build tests
+        run: cmake --build build-cpp --config Release --parallel
+      - name: Run tests
+        run: ctest --test-dir build-cpp --build-config Release --output-on-failure
+
+  web-build:
+    needs: cpp-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+      - name: Build static site
+        env:
+          ROUTER_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          VITE_TEST_STATUS: passed
+        run: npm run build:pages
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: build/pages
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: [cpp-test, web-build]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
