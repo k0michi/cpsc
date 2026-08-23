@@ -45,6 +45,28 @@ export default function SnippetPage({ loaderData }: Route.ComponentProps) {
         ))}
       </div>
       <TextBlock source={snippet.text} />
+      {snippet.validation && snippet.validation.length > 0 && (
+        <section className="validation-section">
+          <header className="test-heading">
+            <h2>Validation</h2>
+            <span>{snippet.validation.length}</span>
+          </header>
+          <div className="validation-list">
+            {snippet.validation.map((validation) => (
+              <a
+                href={validation.url}
+                target="_blank"
+                rel="noreferrer"
+                key={validation.url}
+              >
+                <span>✓</span>
+                {validation.label}
+                <b>↗</b>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
       <section className="test-section">
         <header className="test-heading">
           <h2>Test Cases</h2>

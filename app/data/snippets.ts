@@ -12,10 +12,16 @@ export type Snippet = {
     version: string;
     prism: string;
   };
+  validation?: Validation[] | null;
   code: string;
   subsnippets: Subsnippet[];
   sourceFile: string;
   tests: TestCase[];
+};
+
+export type Validation = {
+  label: string;
+  url: string;
 };
 
 export type Subsnippet = {
@@ -69,6 +75,13 @@ function parseSnippet(path: string, source: string): Omit<Snippet, "tests"> {
 
   if (required.some((value) => value === undefined || value === "")) {
     throw new Error(`Snippet metadata is incomplete: ${path}`);
+  }
+  if (
+    metadata.validation?.some(
+      (validation) => !validation.label || !validation.url,
+    )
+  ) {
+    throw new Error(`Snippet validation metadata is incomplete: ${path}`);
   }
   const textMatch = source.match(
     /\/\* cpsc:text:start\r?\n([\s\S]*?)\r?\ncpsc:text:end \*\//,
