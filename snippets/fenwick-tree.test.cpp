@@ -2,8 +2,8 @@
 snippet: fenwick-tree
 cpsc:meta:end */
 
-#include "../test-support.hpp"
-#include "../../app/snippets/fenwick-tree.cpp"
+#include "test-support.hpp"
+#include "fenwick-tree.cpp"
 
 // cpsc:test:start
 TEST(FenwickTree, BuildsAndQueriesSums) {

@@ -2,8 +2,8 @@
 snippet: disjoint-set
 cpsc:meta:end */
 
-#include "../test-support.hpp"
-#include "../../app/snippets/disjoint-set.cpp"
+#include "test-support.hpp"
+#include "disjoint-set.cpp"
 
 // cpsc:test:start
 TEST(DisjointSet, UnitesAndQueriesComponents) {

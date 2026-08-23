@@ -30,12 +30,15 @@ export type TestCase = {
   sourceFile: string;
 };
 
-const snippetFiles = import.meta.glob<string>("../snippets/*.cpp", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-});
-const testFiles = import.meta.glob<string>("../../tests/snippets/*_test.cpp", {
+const snippetFiles = import.meta.glob<string>(
+  ["../../snippets/*.cpp", "!../../snippets/*.test.cpp"],
+  {
+    query: "?raw",
+    import: "default",
+    eager: true,
+  },
+);
+const testFiles = import.meta.glob<string>("../../snippets/*.test.cpp", {
   query: "?raw",
   import: "default",
   eager: true,

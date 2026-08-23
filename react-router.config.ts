@@ -8,9 +8,11 @@ const basePath = (
   process.env.VITE_BASE_PATH ??
   ""
 ).replace(/\/$/, "");
-const snippetDirectory = resolve("app/snippets");
+const snippetDirectory = resolve("snippets");
 const snippetPaths = readdirSync(snippetDirectory)
-  .filter((filename) => filename.endsWith(".cpp"))
+  .filter(
+    (filename) => filename.endsWith(".cpp") && !filename.endsWith(".test.cpp"),
+  )
   .map((filename) => {
     const source = readFileSync(resolve(snippetDirectory, filename), "utf8");
     const frontmatter = source.match(
