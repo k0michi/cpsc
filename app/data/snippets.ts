@@ -84,7 +84,7 @@ function parseSnippet(path: string, source: string): Omit<Snippet, "tests"> {
     throw new Error(`Snippet validation metadata is incomplete: ${path}`);
   }
   const textMatch = source.match(
-    /\/\* cpsc:text:start\r?\n([\s\S]*?)\r?\ncpsc:text:end \*\//,
+    /\/\* cpsc:text:start\r?\n([\s\S]*?)\s*cpsc:text:end \*\//,
   );
   const rawCode = source.slice(match[0].length).trimStart();
   const subsnippetPattern =
