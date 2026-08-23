@@ -8,6 +8,16 @@ cpsc:meta:end */
 using Mint = ModInt<1'000'000'007>;
 
 // cpsc:test:start
+TEST(ExtendedGCD, ComputesGcdAndBezoutCoefficients) {
+  auto [gcd, x, y] = extendedGCD(240, 46);
+
+  EXPECT_EQ(gcd, 2);
+  EXPECT_EQ(240 * x + 46 * y, gcd);
+  EXPECT_EQ(extendedGCD(17, 0), (std::tuple{17LL, 1LL, 0LL}));
+}
+// cpsc:test:end
+
+// cpsc:test:start
 TEST(ModInt, NormalizesSignedAndUnsignedValues) {
   EXPECT_EQ(Mint(42).val(), 42);
   EXPECT_EQ(Mint(-1).toLLong(), 1'000'000'006);
