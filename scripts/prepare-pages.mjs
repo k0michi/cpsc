@@ -31,7 +31,7 @@ for (const entry of readdirSync(renderedDirectory)) {
   });
 }
 
-for (const sharedEntry of ["assets", "favicon.ico"]) {
+for (const sharedEntry of ["assets"]) {
   const source = join(clientDirectory, sharedEntry);
   if (existsSync(source)) {
     cpSync(source, join(pagesDirectory, sharedEntry), { recursive: true });
@@ -51,9 +51,7 @@ function rewriteAssetPaths(directory) {
     if (!basePath || !textExtensions.has(extension)) continue;
 
     const source = readFileSync(path, "utf8");
-    const rewritten = source
-      .replaceAll("/assets/", `${basePath}/assets/`)
-      .replaceAll("/favicon.ico", `${basePath}/favicon.ico`);
+    const rewritten = source.replaceAll("/assets/", `${basePath}/assets/`);
     writeFileSync(path, rewritten);
   }
 }
