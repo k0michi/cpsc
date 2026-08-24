@@ -80,3 +80,16 @@ TEST(ModInt, SupportsStreams) {
   EXPECT_EQ(value.toLLong(), 1'000'000'006);
 }
 // cpsc:test:end
+
+// cpsc:test:start
+TEST(ModInt, HandlesZeroAndModulusOne) {
+  using TrivialMint = ModInt<1>;
+
+  EXPECT_EQ(Mint{}.val(), 0);
+  EXPECT_EQ((-Mint{}).val(), 0);
+  EXPECT_EQ(Mint(0).pow(0).val(), 1);
+  EXPECT_EQ(TrivialMint(123).val(), 0);
+  EXPECT_EQ((TrivialMint(0) + TrivialMint(0)).val(), 0);
+  EXPECT_EQ(TrivialMint(42).pow(10).val(), 0);
+}
+// cpsc:test:end

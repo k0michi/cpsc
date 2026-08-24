@@ -62,3 +62,20 @@ TEST(FenwickTree, HandlesEmptyTree) {
   EXPECT_EQ(tree.upperBound(0), 0);
 }
 // cpsc:test:end
+
+// cpsc:test:start
+TEST(FenwickTree, HandlesSingletonAndZeroPrefixes) {
+  FenwickTree tree(std::vector<long long>{0});
+
+  EXPECT_EQ(tree.sum(0), 0);
+  EXPECT_EQ(tree.sum(0, 0), 0);
+  EXPECT_EQ(tree.sum(1), 0);
+  EXPECT_EQ(tree.lowerBound(1), tree.size());
+  EXPECT_EQ(tree.upperBound(0), tree.size());
+
+  tree.set(0, -3);
+  EXPECT_EQ(tree.get(0), -3);
+  tree.add(0, 5);
+  EXPECT_EQ(tree.get(0), 2);
+}
+// cpsc:test:end

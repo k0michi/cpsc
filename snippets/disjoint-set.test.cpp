@@ -67,3 +67,18 @@ TEST(DisjointSet, ResizesAndHandlesEmptyState) {
   EXPECT_TRUE(dsu.empty());
 }
 // cpsc:test:end
+
+// cpsc:test:start
+TEST(DisjointSet, HandlesSingleElement) {
+  DisjointSet dsu(1);
+
+  EXPECT_FALSE(dsu.empty());
+  EXPECT_EQ(dsu.leader(0), 0);
+  EXPECT_EQ(dsu.size(0), 1);
+  EXPECT_EQ(dsu.groupCount(), 1);
+  EXPECT_TRUE(dsu.same(0, 0));
+  EXPECT_FALSE(dsu.unite(0, 0));
+  EXPECT_EQ(dsu.groups(),
+            (std::vector<std::vector<std::size_t>>{{0}}));
+}
+// cpsc:test:end

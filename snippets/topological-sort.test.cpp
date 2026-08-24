@@ -57,5 +57,19 @@ TEST(TopologicalSort, DetectsCyclesAndHandlesEmptyGraph) {
 
   std::vector<std::vector<int>> empty;
   EXPECT_EQ(topologicalSort<int>(empty), std::optional(std::vector<int>{}));
+  EXPECT_EQ(lexicographicalTopologicalSort<int>(empty),
+            std::optional(std::vector<int>{}));
+}
+// cpsc:test:end
+
+// cpsc:test:start
+TEST(TopologicalSort, HandlesSingleAndDisconnectedVertices) {
+  std::vector<std::vector<int>> single(1);
+  EXPECT_EQ(topologicalSort<int>(single),
+            std::optional(std::vector<int>{0}));
+
+  std::vector<std::vector<int>> disconnected(4);
+  EXPECT_EQ(lexicographicalTopologicalSort<int>(disconnected),
+            std::optional(std::vector<int>{0, 1, 2, 3}));
 }
 // cpsc:test:end

@@ -18,3 +18,12 @@ TEST(BinaryPow, SupportsUnsignedExponents) {
   EXPECT_EQ(binaryPow(3LL, 5ULL), 243);
 }
 // cpsc:test:end
+
+// cpsc:test:start
+TEST(BinaryPow, HandlesIdentityAndAbsorbingElements) {
+  EXPECT_EQ(binaryPow(0LL, 0), 1);
+  EXPECT_EQ(binaryPow(0LL, 100), 0);
+  EXPECT_EQ(binaryPow(-1LL, 1'000'001), -1);
+  EXPECT_EQ(binaryPow(-1LL, 1'000'000), 1);
+}
+// cpsc:test:end

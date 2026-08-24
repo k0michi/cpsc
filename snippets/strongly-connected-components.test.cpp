@@ -55,3 +55,15 @@ TEST(StronglyConnectedComponents, HandlesEmptyGraph) {
   EXPECT_TRUE(stronglyConnectedComponents<int>(graph).empty());
 }
 // cpsc:test:end
+
+// cpsc:test:start
+TEST(StronglyConnectedComponents, KeepsAcyclicVerticesSeparate) {
+  std::vector<std::vector<int>> graph{{1, 2}, {2}, {}, {}};
+
+  auto groups = stronglyConnectedComponents<int>(graph);
+  ASSERT_EQ(groups.size(), 4);
+  for (auto& group : groups) {
+    EXPECT_EQ(group.size(), 1);
+  }
+}
+// cpsc:test:end

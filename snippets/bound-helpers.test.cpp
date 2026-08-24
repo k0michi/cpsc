@@ -64,3 +64,19 @@ TEST(BoundHelpers, SupportsCustomOrdering) {
   EXPECT_EQ(*::higher(values.begin(), values.end(), 7, comp), 5);
 }
 // cpsc:test:end
+
+// cpsc:test:start
+TEST(BoundHelpers, HandlesEmptyInputs) {
+  std::set<int> container;
+  EXPECT_EQ(::floor(container, 0), container.end());
+  EXPECT_EQ(::lower(container, 0), container.end());
+  EXPECT_EQ(::ceil(container, 0), container.end());
+  EXPECT_EQ(::higher(container, 0), container.end());
+
+  std::vector<int> range;
+  EXPECT_EQ(::floor(range.begin(), range.end(), 0), range.end());
+  EXPECT_EQ(::lower(range.begin(), range.end(), 0), range.end());
+  EXPECT_EQ(::ceil(range.begin(), range.end(), 0), range.end());
+  EXPECT_EQ(::higher(range.begin(), range.end(), 0), range.end());
+}
+// cpsc:test:end

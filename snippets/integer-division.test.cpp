@@ -48,3 +48,19 @@ TEST(IntegerDivision, SupportsConstantEvaluation) {
   SUCCEED();
 }
 // cpsc:test:end
+
+// cpsc:test:start
+TEST(IntegerDivision, HandlesZeroAndIntegerLimits) {
+  EXPECT_EQ(floorDiv(0LL, -7LL), 0);
+  EXPECT_EQ(floorMod(0LL, -7LL), 0);
+  EXPECT_EQ(ceilDiv(0LL, 7LL), 0);
+  EXPECT_EQ(ceilMod(0LL, 7LL), 0);
+
+  long long min = std::numeric_limits<long long>::min();
+  long long max = std::numeric_limits<long long>::max();
+  EXPECT_EQ(floorDiv(min, 2LL), min / 2);
+  EXPECT_EQ(ceilDiv(max, 2LL), max / 2 + 1);
+  EXPECT_EQ(floorMod(min, 2LL), 0);
+  EXPECT_EQ(ceilMod(max, 2LL), -1);
+}
+// cpsc:test:end

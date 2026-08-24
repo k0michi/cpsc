@@ -47,3 +47,14 @@ TEST(ChineseRemainderTheorem, SupportsConstantEvaluation) {
   SUCCEED();
 }
 // cpsc:test:end
+
+// cpsc:test:start
+TEST(ChineseRemainderTheorem, HandlesTrivialAndRepeatedCongruences) {
+  EXPECT_EQ(crt(123, 1, -456, 1),
+            (std::optional<std::pair<long long, long long>>{{0, 1}}));
+  EXPECT_EQ(crt(-1, 7, 6, 7),
+            (std::optional<std::pair<long long, long long>>{{6, 7}}));
+  EXPECT_EQ(crt(std::vector<std::pair<long long, long long>>{{1, 2}, {0, 4}}),
+            std::nullopt);
+}
+// cpsc:test:end
