@@ -11,6 +11,7 @@ export function AppShell({
   category?: string;
 }) {
   const [query, setQuery] = useState("");
+  const shellRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const visibleSnippets = useMemo(() => {
     const term = query.trim().toLowerCase();
@@ -32,6 +33,18 @@ export function AppShell({
     return () => window.removeEventListener("keydown", focusSearch);
   }, []);
 
+  useEffect(() => {
+    function positionSidebar() {
+      shellRef.current?.style.setProperty(
+        "--sidebar-top",
+        `${Math.max(0, 52 - window.scrollY)}px`,
+      );
+    }
+    positionSidebar();
+    window.addEventListener("scroll", positionSidebar, { passive: true });
+    return () => window.removeEventListener("scroll", positionSidebar);
+  }, []);
+
   const themeStyle = category
     ? ({
         "--category-hue": hueFromCategory(category, categories),
@@ -40,6 +53,7 @@ export function AppShell({
 
   return (
     <div
+      ref={shellRef}
       className={`app-shell ${category ? "has-category" : ""}`}
       style={themeStyle}
     >
@@ -91,7 +105,18 @@ export function AppShell({
             {visibleSnippets.length === 0 && <span className="nav-empty">No snippets</span>}
           </nav>
         </aside>
-        <main className="main-content">{children}</main>
+        <main className="main-content">
+          {children}
+          <footer className="site-footer">
+            <a
+              href="https://creativecommons.org/publicdomain/zero/1.0/"
+              target="_blank"
+              rel="license noreferrer"
+            >
+              CC0 1.0 — Public Domain ↗
+            </a>
+          </footer>
+        </main>
       </div>
     </div>
   );
