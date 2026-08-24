@@ -46,6 +46,17 @@ TEST(ModInt, SupportsArithmeticAndIncrementOperators) {
 // cpsc:test:end
 
 // cpsc:test:start
+TEST(ModInt, MultipliesWithoutUnsignedLongLongOverflow) {
+  using LargeMint = ModInt<9'223'372'036'854'775'123ULL>;
+  unsigned long long value = 9'000'000'000'000'000'000ULL;
+  unsigned long long expected = static_cast<unsigned long long>(
+      static_cast<__uint128_t>(value) * value % LargeMint::Modulus);
+
+  EXPECT_EQ((LargeMint(value) * LargeMint(value)).val(), expected);
+}
+// cpsc:test:end
+
+// cpsc:test:start
 TEST(ModInt, ComputesPowersAndInverses) {
   EXPECT_EQ(Mint(2).pow(10).toLLong(), 1024);
   EXPECT_EQ(Mint::pow(Mint(2), 10).toLLong(), 1024);

@@ -26,7 +26,7 @@ cpsc:meta:end */
 - 構築時と入力時に負数を含む整数を $[0, M)$ へ正規化する
 - $0 < M \leq \mathrm{LLONG\_MAX}$ を満たす法を使用する
 - 除算は除数と $M$ が互いに素な場合に限る。逆元が存在しない場合はassertionに失敗する
-- 乗算前の積が `unsigned long long` を超える法ではoverflowする
+- 乗算の中間値にGCC・Clangの `__uint128_t` 拡張を使用する
 cpsc:text:end */
 
 // cpsc:subsnippet:start ModInt
@@ -82,7 +82,8 @@ struct ModInt {
   }
 
   constexpr ModInt<M> &operator*=(const ModInt<M> &r) {
-    mValue = (mValue * r.mValue) % Modulus;
+    mValue = static_cast<unsigned long long>(
+        static_cast<__uint128_t>(mValue) * r.mValue % Modulus);
     return *this;
   }
 
