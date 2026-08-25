@@ -11,6 +11,36 @@ language:
 cpsc:meta:end */
 
 /* cpsc:text:start
+## Requirements
+値の集合を $S$ とする。この実装が正しく動作するには、`op` と `unit` がモノイド $(S,\operatorname{op},\mathrm{unit})$ をなす必要がある。
+
+`op` は $S$ 上で閉じた二項演算、`unit` は $S$ の要素とする。
+
+$$
+\operatorname{op}:S\times S\to S,
+\qquad
+\mathrm{unit}\in S
+$$
+
+`op` は結合律を満たす。
+
+$$
+\operatorname{op}(\operatorname{op}(a,b),c)
+=\operatorname{op}(a,\operatorname{op}(b,c))
+\qquad (a,b,c\in S)
+$$
+
+`unit` は `op` の単位元となる。
+
+$$
+\operatorname{op}(\mathrm{unit},a)
+=\operatorname{op}(a,\mathrm{unit})
+=a
+\qquad (a\in S)
+$$
+
+これらの条件によって、区間の分割方法によらず同じ積を得られ、空区間を `unit` で表せる。
+
 ## Complexity
 | Operation | Complexity |
 | --- | --- |
@@ -21,8 +51,6 @@ cpsc:meta:end */
 | Space | $O(N)$ |
 
 ## Usage
-- Segment Treeには、値の型と区間を併合する演算がモノイドをなすものを載せられる
-- `Op` は結合則を満たす二項演算、`unit` はその単位元とする
 - 総和と $0$、最小値と $\infty$、最大値と $-\infty$、GCDと $0$、行列積と単位行列、文字列連結と空文字列などが使える
 - `product(left, right)` は半開区間 $[left,right)$ の積を返す
 - `partitionPoint` のpredicateは単位元に対してtrueとなり、積を延長するとtrueからfalseへ単調に変化するものとする
