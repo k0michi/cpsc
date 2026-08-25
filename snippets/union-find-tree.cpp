@@ -1,7 +1,7 @@
 /* cpsc:meta:start
-slug: disjoint-set
-title: Disjoint Set
-shortTitle: Disjoint Set
+slug: union-find-tree
+title: Union-Find Tree
+shortTitle: Union-Find
 category: Data Structure
 description: 要素を互いに素な集合へ分け、集合の結合と連結判定を高速に処理する。
 language:
@@ -25,8 +25,8 @@ cpsc:meta:end */
 - 範囲外の要素を渡すとassertionに失敗する
 cpsc:text:end */
 
-// cpsc:subsnippet:start DisjointSet
-class DisjointSet {
+// cpsc:subsnippet:start UnionFindTree
+class UnionFindTree {
 public:
   using size_type = std::size_t;
 
@@ -36,8 +36,8 @@ private:
   mutable std::vector<long long> parentOrSize_;
 
 public:
-  DisjointSet() : DisjointSet(0) {}
-  explicit DisjointSet(size_type n)
+  UnionFindTree() : UnionFindTree(0) {}
+  explicit UnionFindTree(size_type n)
       : elementCount_(n), groupCount_(n), parentOrSize_(n, -1) {}
 
   size_type leader(size_type x) const {

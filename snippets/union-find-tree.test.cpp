@@ -1,13 +1,13 @@
 /* cpsc:meta:start
-snippet: disjoint-set
+snippet: union-find-tree
 cpsc:meta:end */
 
 #include "test-support.hpp"
-#include "disjoint-set.cpp"
+#include "union-find-tree.cpp"
 
 // cpsc:test:start
-TEST(DisjointSet, UnitesAndQueriesComponents) {
-  DisjointSet dsu(6);
+TEST(UnionFindTree, UnitesAndQueriesComponents) {
+  UnionFindTree dsu(6);
 
   EXPECT_EQ(dsu.size(), 6);
   EXPECT_EQ(dsu.groupCount(), 6);
@@ -23,8 +23,8 @@ TEST(DisjointSet, UnitesAndQueriesComponents) {
 // cpsc:test:end
 
 // cpsc:test:start
-TEST(DisjointSet, EnumeratesGroups) {
-  DisjointSet dsu(5);
+TEST(UnionFindTree, EnumeratesGroups) {
+  UnionFindTree dsu(5);
   dsu.unite(0, 1);
   dsu.unite(3, 4);
   dsu.unite(1, 4);
@@ -38,8 +38,8 @@ TEST(DisjointSet, EnumeratesGroups) {
 // cpsc:test:end
 
 // cpsc:test:start
-TEST(DisjointSet, ClearsWithoutChangingElementCount) {
-  DisjointSet dsu(4);
+TEST(UnionFindTree, ClearsWithoutChangingElementCount) {
+  UnionFindTree dsu(4);
   dsu.unite(0, 1);
   dsu.unite(2, 3);
 
@@ -53,8 +53,8 @@ TEST(DisjointSet, ClearsWithoutChangingElementCount) {
 // cpsc:test:end
 
 // cpsc:test:start
-TEST(DisjointSet, ResizesAndHandlesEmptyState) {
-  DisjointSet dsu;
+TEST(UnionFindTree, ResizesAndHandlesEmptyState) {
+  UnionFindTree dsu;
   EXPECT_TRUE(dsu.empty());
   EXPECT_EQ(dsu.groupCount(), 0);
 
@@ -69,8 +69,8 @@ TEST(DisjointSet, ResizesAndHandlesEmptyState) {
 // cpsc:test:end
 
 // cpsc:test:start
-TEST(DisjointSet, HandlesSingleElement) {
-  DisjointSet dsu(1);
+TEST(UnionFindTree, HandlesSingleElement) {
+  UnionFindTree dsu(1);
 
   EXPECT_FALSE(dsu.empty());
   EXPECT_EQ(dsu.leader(0), 0);
