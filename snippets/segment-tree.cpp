@@ -21,8 +21,9 @@ cpsc:meta:end */
 | Space | $O(N)$ |
 
 ## Usage
-- `Op` は結合則を満たす二項演算とする。可換則は不要
-- `unit` は `Op` の単位元とする
+- Segment Treeには、値の型と区間を併合する演算がモノイドをなすものを載せられる
+- `Op` は結合則を満たす二項演算、`unit` はその単位元とする
+- 総和と $0$、最小値と $\infty$、最大値と $-\infty$、GCDと $0$、行列積と単位行列、文字列連結と空文字列などが使える
 - `product(left, right)` は半開区間 $[left,right)$ の積を返す
 - `partitionPoint` のpredicateは単位元に対してtrueとなり、積を延長するとtrueからfalseへ単調に変化するものとする
 - 範囲外のindexや不正な区間を渡すとassertionに失敗する
@@ -110,8 +111,7 @@ public:
   template <typename P>
   [[nodiscard]] size_type partitionPoint(size_type left, size_type right,
                                          P predicate) const
-    requires std::predicate<P, value_type>
-  {
+    requires std::predicate<P, value_type> {
     assert(left <= right && right <= length_);
     assert(predicate(unit_));
     if (left == right) {
@@ -144,16 +144,14 @@ public:
 
   template <typename P>
   [[nodiscard]] size_type partitionPoint(size_type left, P predicate) const
-    requires std::predicate<P, value_type>
-  {
+    requires std::predicate<P, value_type> {
     return partitionPoint(left, length_, predicate);
   }
 
   template <typename P>
   [[nodiscard]] size_type partitionPointReverse(size_type left, size_type right,
                                                 P predicate) const
-    requires std::predicate<P, value_type>
-  {
+    requires std::predicate<P, value_type> {
     assert(left <= right && right <= length_);
     assert(predicate(unit_));
     if (left == right) {
@@ -187,8 +185,7 @@ public:
   template <typename P>
   [[nodiscard]] size_type partitionPointReverse(size_type right,
                                                 P predicate) const
-    requires std::predicate<P, value_type>
-  {
+    requires std::predicate<P, value_type> {
     return partitionPointReverse(0, right, predicate);
   }
 
