@@ -32,8 +32,7 @@ TEST(UnionFindTree, EnumeratesGroups) {
   auto groups = dsu.groups();
   std::sort(groups.begin(), groups.end());
 
-  EXPECT_EQ(groups,
-            (std::vector<std::vector<std::size_t>>{{0, 1, 3, 4}, {2}}));
+  EXPECT_EQ(groups, (std::vector<std::vector<std::size_t>>{{0, 1, 3, 4}, {2}}));
 }
 // cpsc:test:end
 
@@ -78,7 +77,6 @@ TEST(UnionFindTree, HandlesSingleElement) {
   EXPECT_EQ(dsu.groupCount(), 1);
   EXPECT_TRUE(dsu.same(0, 0));
   EXPECT_FALSE(dsu.unite(0, 0));
-  EXPECT_EQ(dsu.groups(),
-            (std::vector<std::vector<std::size_t>>{{0}}));
+  EXPECT_EQ(dsu.groups(), (std::vector<std::vector<std::size_t>>{{0}}));
 }
 // cpsc:test:end

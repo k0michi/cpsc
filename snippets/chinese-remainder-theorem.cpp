@@ -58,7 +58,7 @@ cpsc:text:end */
 
 // cpsc:subsnippet:start Chinese Remainder Theorem
 constexpr std::tuple<long long, long long, long long> extendedGCD(long long a,
-                                                                 long long b) {
+                                                                  long long b) {
   if (b == 0) {
     return {a, 1, 0};
   }
@@ -67,10 +67,8 @@ constexpr std::tuple<long long, long long, long long> extendedGCD(long long a,
   return {gcd, x, y};
 }
 
-constexpr std::optional<std::pair<long long, long long>> crt(long long r1,
-                                                             long long m1,
-                                                             long long r2,
-                                                             long long m2) {
+constexpr std::optional<std::pair<long long, long long>>
+crt(long long r1, long long m1, long long r2, long long m2) {
   long long rem1 = (r1 % m1 + m1) % m1;
   long long rem2 = (r2 % m2 + m2) % m2;
 
@@ -82,8 +80,8 @@ constexpr std::optional<std::pair<long long, long long>> crt(long long r1,
 
   long long u = m2 / g;
   long long diff = (rem2 - rem1) / g;
-  long long factor = static_cast<long long>(
-      (__int128_t(diff % u) * (p % u) % u + u) % u);
+  long long factor =
+      static_cast<long long>((__int128_t(diff % u) * (p % u) % u + u) % u);
 
   long long mergedMod = m1 * u;
   long long mergedRem = rem1 + m1 * factor;
@@ -91,11 +89,11 @@ constexpr std::optional<std::pair<long long, long long>> crt(long long r1,
   return std::make_pair(mergedRem, mergedMod);
 }
 
-constexpr std::optional<std::pair<long long, long long>> crt(
-    const std::vector<std::pair<long long, long long>>& congruences) {
+constexpr std::optional<std::pair<long long, long long>>
+crt(const std::vector<std::pair<long long, long long>> &congruences) {
   std::pair<long long, long long> current{0, 1};
 
-  for (auto&& [rem, mod] : congruences) {
+  for (auto &&[rem, mod] : congruences) {
     auto result = crt(current.first, current.second, rem, mod);
     if (!result) {
       return std::nullopt;

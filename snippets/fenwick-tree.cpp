@@ -117,9 +117,15 @@ public:
     return index;
   }
 
-  void clear() { std::fill(tree_.begin(), tree_.end(), value_type{}); }
+  void clear() {
+    std::fill(tree_.begin(), tree_.end(), value_type{});
+  }
 
-  [[nodiscard]] size_type size() const noexcept { return length_; }
-  [[nodiscard]] bool empty() const noexcept { return length_ == 0; }
+  [[nodiscard]] size_type size() const noexcept {
+    return length_;
+  }
+  [[nodiscard]] bool empty() const noexcept {
+    return length_ == 0;
+  }
 };
 // cpsc:subsnippet:end

@@ -7,16 +7,14 @@ cpsc:meta:end */
 
 // cpsc:test:start
 TEST(StronglyConnectedComponents, DecomposesGraphInTopologicalOrder) {
-  std::vector<std::vector<int>> graph{
-      {1}, {2, 3}, {0}, {4}, {3, 5}, {}};
+  std::vector<std::vector<int>> graph{{1}, {2, 3}, {0}, {4}, {3, 5}, {}};
 
   auto groups = stronglyConnectedComponents<int>(graph);
-  for (auto& group : groups) {
+  for (auto &group : groups) {
     std::sort(group.begin(), group.end());
   }
 
-  EXPECT_EQ(groups,
-            (std::vector<std::vector<int>>{{0, 1, 2}, {3, 4}, {5}}));
+  EXPECT_EQ(groups, (std::vector<std::vector<int>>{{0, 1, 2}, {3, 4}, {5}}));
 }
 // cpsc:test:end
 
@@ -25,13 +23,12 @@ TEST(StronglyConnectedComponents, HandlesSelfLoopsAndIsolatedVertices) {
   std::vector<std::vector<int>> graph{{0}, {}, {3}, {2}};
   auto groups = stronglyConnectedComponents<int>(graph);
 
-  for (auto& group : groups) {
+  for (auto &group : groups) {
     std::sort(group.begin(), group.end());
   }
   std::sort(groups.begin(), groups.end());
 
-  EXPECT_EQ(groups,
-            (std::vector<std::vector<int>>{{0}, {1}, {2, 3}}));
+  EXPECT_EQ(groups, (std::vector<std::vector<int>>{{0}, {1}, {2, 3}}));
 }
 // cpsc:test:end
 
@@ -43,8 +40,8 @@ TEST(StronglyConnectedComponents, SupportsMemberAndTupleEdges) {
   std::vector<std::vector<E>> memberGraph{{{1}}, {{0}}};
   EXPECT_EQ(stronglyConnectedComponents<int>(memberGraph).size(), 1);
 
-  std::vector<std::vector<std::pair<int, int>>> tupleGraph{
-      {{1, 10}}, {{0, 20}}};
+  std::vector<std::vector<std::pair<int, int>>> tupleGraph{{{1, 10}},
+                                                           {{0, 20}}};
   EXPECT_EQ(stronglyConnectedComponents<int>(tupleGraph).size(), 1);
 }
 // cpsc:test:end
@@ -62,7 +59,7 @@ TEST(StronglyConnectedComponents, KeepsAcyclicVerticesSeparate) {
 
   auto groups = stronglyConnectedComponents<int>(graph);
   ASSERT_EQ(groups.size(), 4);
-  for (auto& group : groups) {
+  for (auto &group : groups) {
     EXPECT_EQ(group.size(), 1);
   }
 }

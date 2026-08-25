@@ -58,7 +58,9 @@ public:
     assert(x < elementCount_ && y < elementCount_);
     size_type rootX = leader(x);
     size_type rootY = leader(y);
-    if (rootX == rootY) return false;
+    if (rootX == rootY) {
+      return false;
+    }
 
     if (-parentOrSize_[rootX] < -parentOrSize_[rootY]) {
       std::swap(rootX, rootY);
@@ -79,9 +81,13 @@ public:
     return static_cast<size_type>(-parentOrSize_[leader(x)]);
   }
 
-  [[nodiscard]] size_type size() const noexcept { return elementCount_; }
+  [[nodiscard]] size_type size() const noexcept {
+    return elementCount_;
+  }
 
-  [[nodiscard]] size_type groupCount() const noexcept { return groupCount_; }
+  [[nodiscard]] size_type groupCount() const noexcept {
+    return groupCount_;
+  }
 
   [[nodiscard]] std::vector<std::vector<size_type>> groups() const {
     std::vector<size_type> leaderBuf(elementCount_);
@@ -100,11 +106,9 @@ public:
       result[leaderBuf[i]].push_back(i);
     }
 
-    result.erase(
-      std::remove_if(result.begin(), result.end(),
-                     [](const auto& g) { return g.empty(); }),
-      result.end()
-    );
+    result.erase(std::remove_if(result.begin(), result.end(),
+                                [](const auto &g) { return g.empty(); }),
+                 result.end());
     return result;
   }
 
@@ -119,6 +123,8 @@ public:
     parentOrSize_.assign(n, -1);
   }
 
-  [[nodiscard]] bool empty() const noexcept { return elementCount_ == 0; }
+  [[nodiscard]] bool empty() const noexcept {
+    return elementCount_ == 0;
+  }
 };
 // cpsc:subsnippet:end

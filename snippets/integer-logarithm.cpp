@@ -25,16 +25,14 @@ cpsc:meta:end */
 cpsc:text:end */
 
 // cpsc:subsnippet:start floorLog2
-template <std::integral T>
-[[nodiscard]] constexpr int floorLog2(T n) {
+template <std::integral T> [[nodiscard]] constexpr int floorLog2(T n) {
   using U = std::make_unsigned_t<T>;
   return std::bit_width(static_cast<U>(n)) - 1;
 }
 // cpsc:subsnippet:end
 
 // cpsc:subsnippet:start ceilLog2
-template <std::integral T>
-[[nodiscard]] constexpr int ceilLog2(T n) {
+template <std::integral T> [[nodiscard]] constexpr int ceilLog2(T n) {
   if (n <= 1) {
     return 0;
   }
@@ -44,8 +42,7 @@ template <std::integral T>
 // cpsc:subsnippet:end
 
 // cpsc:subsnippet:start floorLog
-template <std::integral T>
-[[nodiscard]] constexpr int floorLog(T base, T n) {
+template <std::integral T> [[nodiscard]] constexpr int floorLog(T base, T n) {
   int count = 0;
   while (n >= base) {
     n /= base;
@@ -56,8 +53,7 @@ template <std::integral T>
 // cpsc:subsnippet:end
 
 // cpsc:subsnippet:start ceilLog
-template <std::integral T>
-[[nodiscard]] constexpr int ceilLog(T base, T n) {
+template <std::integral T> [[nodiscard]] constexpr int ceilLog(T base, T n) {
   int count = 0;
   while (n > 1) {
     n = 1 + (n - 1) / base;

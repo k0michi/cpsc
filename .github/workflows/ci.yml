@@ -18,6 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Install clang-format
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes clang-format
+      - name: Check C++ formatting
+        run: npm run format:cpp:check
       - name: Configure CMake
         run: cmake -S . -B build-cpp -DCMAKE_BUILD_TYPE=Release
       - name: Build tests

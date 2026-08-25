@@ -32,7 +32,7 @@ cpsc:text:end */
 // cpsc:subsnippet:start ModInt
 // cpsc:subsnippet:description 拡張Euclid法を使い、値の正規化、四則演算、累乗、逆元を提供する。
 constexpr std::tuple<long long, long long, long long> extendedGCD(long long a,
-                                                                 long long b) {
+                                                                  long long b) {
   if (b == 0) {
     return {a, 1, 0};
   }
@@ -41,15 +41,15 @@ constexpr std::tuple<long long, long long, long long> extendedGCD(long long a,
   return {gcd, x, y};
 }
 
-template <unsigned long long M>
-struct ModInt {
+template <unsigned long long M> struct ModInt {
   static constexpr unsigned long long Modulus = M;
 
   constexpr ModInt() : mValue(0) {}
 
   template <typename T, std::enable_if_t<std::is_signed_v<T>> * = nullptr>
   constexpr ModInt(T value) {
-    long long normalized = static_cast<long long>(value) % static_cast<long long>(Modulus);
+    long long normalized =
+        static_cast<long long>(value) % static_cast<long long>(Modulus);
     if (normalized < 0) {
       normalized += Modulus;
     }
@@ -57,11 +57,18 @@ struct ModInt {
   }
 
   template <typename T, std::enable_if_t<std::is_unsigned_v<T>> * = nullptr>
-  constexpr ModInt(T value) : mValue(static_cast<unsigned long long>(value) % Modulus) {}
+  constexpr ModInt(T value)
+      : mValue(static_cast<unsigned long long>(value) % Modulus) {}
 
-  constexpr unsigned long long val() const { return mValue; }
-  constexpr long long toLLong() const { return static_cast<long long>(mValue); }
-  constexpr unsigned long long toULLong() const { return mValue; }
+  constexpr unsigned long long val() const {
+    return mValue;
+  }
+  constexpr long long toLLong() const {
+    return static_cast<long long>(mValue);
+  }
+  constexpr unsigned long long toULLong() const {
+    return mValue;
+  }
 
   constexpr ModInt &operator+=(ModInt r) {
     mValue += r.mValue;
@@ -82,8 +89,8 @@ struct ModInt {
   }
 
   constexpr ModInt<M> &operator*=(const ModInt<M> &r) {
-    mValue = static_cast<unsigned long long>(
-        static_cast<__uint128_t>(mValue) * r.mValue % Modulus);
+    mValue = static_cast<unsigned long long>(static_cast<__uint128_t>(mValue) *
+                                             r.mValue % Modulus);
     return *this;
   }
 
@@ -91,11 +98,19 @@ struct ModInt {
     return *this *= r.inv();
   }
 
-  constexpr ModInt operator+() const { return *this; }
-  constexpr ModInt operator-() const { return ModInt{} - *this; }
+  constexpr ModInt operator+() const {
+    return *this;
+  }
+  constexpr ModInt operator-() const {
+    return ModInt{} - *this;
+  }
 
-  constexpr ModInt &operator++() { return *this += 1; }
-  constexpr ModInt &operator--() { return *this -= 1; }
+  constexpr ModInt &operator++() {
+    return *this += 1;
+  }
+  constexpr ModInt &operator--() {
+    return *this -= 1;
+  }
 
   constexpr ModInt<M> operator++(int) {
     ModInt<M> result = *this;
@@ -109,13 +124,19 @@ struct ModInt {
     return result;
   }
 
-  constexpr bool operator==(ModInt r) const { return mValue == r.mValue; }
-  constexpr bool operator!=(ModInt r) const { return mValue != r.mValue; }
+  constexpr bool operator==(ModInt r) const {
+    return mValue == r.mValue;
+  }
+  constexpr bool operator!=(ModInt r) const {
+    return mValue != r.mValue;
+  }
 
   constexpr ModInt pow(unsigned long long exp) const {
     ModInt res = 1, base = *this;
     while (exp > 0) {
-      if (exp & 1) res *= base;
+      if (exp & 1) {
+        res *= base;
+      }
       base *= base;
       exp >>= 1;
     }
@@ -129,13 +150,25 @@ struct ModInt {
     return ModInt(x);
   }
 
-  static constexpr ModInt pow(ModInt a, unsigned long long exp) { return a.pow(exp); }
-  static constexpr ModInt invert(ModInt a) { return a.inv(); }
+  static constexpr ModInt pow(ModInt a, unsigned long long exp) {
+    return a.pow(exp);
+  }
+  static constexpr ModInt invert(ModInt a) {
+    return a.inv();
+  }
 
-  friend constexpr ModInt operator+(ModInt l, ModInt r) { return l += r; }
-  friend constexpr ModInt operator-(ModInt l, ModInt r) { return l -= r; }
-  friend constexpr ModInt operator*(ModInt l, ModInt r) { return l *= r; }
-  friend constexpr ModInt operator/(ModInt l, ModInt r) { return l /= r; }
+  friend constexpr ModInt operator+(ModInt l, ModInt r) {
+    return l += r;
+  }
+  friend constexpr ModInt operator-(ModInt l, ModInt r) {
+    return l -= r;
+  }
+  friend constexpr ModInt operator*(ModInt l, ModInt r) {
+    return l *= r;
+  }
+  friend constexpr ModInt operator/(ModInt l, ModInt r) {
+    return l /= r;
+  }
 
   friend std::ostream &operator<<(std::ostream &s, ModInt a) {
     return s << a.mValue;
