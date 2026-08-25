@@ -11,9 +11,9 @@ TEST(UnionFindTree, UnitesAndQueriesComponents) {
 
   EXPECT_EQ(dsu.size(), 6);
   EXPECT_EQ(dsu.groupCount(), 6);
-  EXPECT_TRUE(dsu.unite(0, 1));
-  EXPECT_TRUE(dsu.unite(1, 2));
-  EXPECT_FALSE(dsu.unite(0, 2));
+  EXPECT_EQ(dsu.unite(0, 1), (std::pair{true, std::size_t{0}}));
+  EXPECT_EQ(dsu.unite(1, 2), (std::pair{true, std::size_t{0}}));
+  EXPECT_EQ(dsu.unite(0, 2), (std::pair{false, std::size_t{0}}));
   EXPECT_TRUE(dsu.same(0, 2));
   EXPECT_FALSE(dsu.same(0, 3));
   EXPECT_EQ(dsu.size(1), 3);
@@ -76,7 +76,7 @@ TEST(UnionFindTree, HandlesSingleElement) {
   EXPECT_EQ(dsu.size(0), 1);
   EXPECT_EQ(dsu.groupCount(), 1);
   EXPECT_TRUE(dsu.same(0, 0));
-  EXPECT_FALSE(dsu.unite(0, 0));
+  EXPECT_EQ(dsu.unite(0, 0), (std::pair{false, std::size_t{0}}));
   EXPECT_EQ(dsu.groups(), (std::vector<std::vector<std::size_t>>{{0}}));
 }
 // cpsc:test:end

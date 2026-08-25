@@ -20,6 +20,7 @@ cpsc:meta:end */
 
 ## Usage
 - 要素は0以上 `size()` 未満の整数で表す
+- `unite(x, y)` は `{merged, leader}` を返す。`merged` は新しく結合したか、`leader` は結合後の代表元を表す
 - `leader` はconst関数だが、経路圧縮のため内部状態を変更する
 - `groups()` が返すグループや要素の順序に依存しない
 - 範囲外の要素を渡すとassertionに失敗する
@@ -54,12 +55,12 @@ public:
     return root;
   }
 
-  bool unite(size_type x, size_type y) {
+  std::pair<bool, size_type> unite(size_type x, size_type y) {
     assert(x < elementCount_ && y < elementCount_);
     size_type rootX = leader(x);
     size_type rootY = leader(y);
     if (rootX == rootY) {
-      return false;
+      return {false, rootX};
     }
 
     if (-parentOrSize_[rootX] < -parentOrSize_[rootY]) {
@@ -68,7 +69,7 @@ public:
     parentOrSize_[rootX] += parentOrSize_[rootY];
     parentOrSize_[rootY] = static_cast<long long>(rootX);
     groupCount_--;
-    return true;
+    return {true, rootX};
   }
 
   [[nodiscard]] bool same(size_type x, size_type y) const {
