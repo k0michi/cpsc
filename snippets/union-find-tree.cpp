@@ -8,6 +8,9 @@ language:
   name: C++
   version: "20"
   prism: cpp
+validation:
+  - label: AOJ DSL_1_A
+    url: https://onlinejudge.u-aizu.ac.jp/status/users/k0michi/submissions/1/DSL_1_A/judge/11668194/C++20
 cpsc:meta:end */
 
 /* cpsc:text:start
