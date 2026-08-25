@@ -14,4 +14,5 @@ AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
 AllowShortCaseLabelsOnASingleLine: false
 ReflowComments: false
+RequiresClausePosition: WithFollowing
 SortIncludes: Never
