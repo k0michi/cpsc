@@ -12,20 +12,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Complexity
-| Function | Time | Space |
-| --- | --- | --- |
-| `floorLog2`, `ceilLog2` | $O(1)$ | $O(1)$ |
-| `floorLog`, `ceilLog` | $O(\log_b n)$ | $O(1)$ |
-
-## Usage
-- `floorLog2(n)` は $n \ge 1$ とする
-- `ceilLog2(n)` は $n \le 1$ のとき `0` を返す
-- `floorLog(base, n)` と `ceilLog(base, n)` は $base \ge 2, n \ge 1$ とする
-- 浮動小数点数の丸め誤差を避け、整数型の最大値まで扱える
-cpsc:text:end */
-
 // cpsc:subsnippet:start floorLog2
 template <std::integral T> [[nodiscard]] constexpr int floorLog2(T n) {
   using U = std::make_unsigned_t<T>;
@@ -64,3 +50,17 @@ template <std::integral T> [[nodiscard]] constexpr int ceilLog(T base, T n) {
   return count;
 }
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Complexity
+| Function | Time | Space |
+| --- | --- | --- |
+| `floorLog2`, `ceilLog2` | $O(1)$ | $O(1)$ |
+| `floorLog`, `ceilLog` | $O(\log_b n)$ | $O(1)$ |
+
+## Usage
+- `floorLog2(n)` は $n \ge 1$ とする
+- `ceilLog2(n)` は $n \le 1$ のとき `0` を返す
+- `floorLog(base, n)` と `ceilLog(base, n)` は $base \ge 2, n \ge 1$ とする
+- 浮動小数点数の丸め誤差を避け、整数型の最大値まで扱える
+cpsc:text:end */

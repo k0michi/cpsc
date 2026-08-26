@@ -12,90 +12,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Requirements
-値の集合を $S$、作用素の集合を $F$ とする。この実装が正しく動作するには、次の条件をすべて満たす必要がある。
-
-### 1. 値のモノイド
-
-`op` と `unit` はモノイド $(S,\operatorname{op},\mathrm{unit})$ をなす。
-
-$$
-\begin{aligned}
-\operatorname{op}&:S\times S\to S,
-&\mathrm{unit}&\in S \\
-\operatorname{op}(\operatorname{op}(a,b),c)
-  &= \operatorname{op}(a,\operatorname{op}(b,c))
-&& (a,b,c\in S) \\
-\operatorname{op}(\mathrm{unit},a)
-  &= \operatorname{op}(a,\mathrm{unit})=a
-&& (a\in S)
-\end{aligned}
-$$
-
-### 2. 作用素のモノイド
-
-`composition` と `identity` はモノイド $(F,\operatorname{composition},\mathrm{identity})$ をなす。`composition(f, g)` は $g$ の後に $f$ を適用する作用を表す。
-
-$$
-\begin{aligned}
-\operatorname{composition}&:F\times F\to F,
-&\mathrm{identity}&\in F \\
-\operatorname{composition}(f,\operatorname{composition}(g,h))
-  &= \operatorname{composition}(\operatorname{composition}(f,g),h)
-&& (f,g,h\in F) \\
-\operatorname{composition}(\mathrm{identity},f)
-  &= \operatorname{composition}(f,\mathrm{identity})=f
-&& (f\in F)
-\end{aligned}
-$$
-
-### 3. 自己準同型による左モノイド作用
-
-`mapping` は $F\times S\to S$ であり、$S$ をleft $F$-actにする。恒等作用を保ち、作用の合成と整合する。
-
-$$
-\begin{aligned}
-\operatorname{mapping}(\mathrm{identity},a)&=a
-&& (a\in S) \\
-\operatorname{mapping}(\operatorname{composition}(f,g),a)
-  &=\operatorname{mapping}(f,\operatorname{mapping}(g,a))
-&& (f,g\in F,\ a\in S)
-\end{aligned}
-$$
-
-さらに各 $f\in F$ が誘導する写像 $\operatorname{mapping}(f,-):S\to S$ は、値のモノイドの自己準同型となる。つまり、単位元と演算を保存する。
-
-$$
-\begin{aligned}
-\operatorname{mapping}(f,\mathrm{unit})&=\mathrm{unit}
-&& (f\in F) \\
-\operatorname{mapping}(f,\operatorname{op}(a,b))
-  &=\operatorname{op}(\operatorname{mapping}(f,a),
-                      \operatorname{mapping}(f,b))
-&& (f\in F,\ a,b\in S)
-\end{aligned}
-$$
-
-左モノイド作用の条件によって遅延作用を合成でき、自己準同型の条件によって作用を各要素へ配らず区間積へ直接適用できる。
-
-## Complexity
-| Operation | Complexity |
-| --- | --- |
-| Construction | $O(N)$ |
-| `set` / `get` / `product` / `apply` / `partitionPoint` / `partitionPointReverse` | $O(\log N)$ |
-| `allProduct` / `size` / `empty` | $O(1)$ |
-| `clear` | $O(N)$ |
-| Space | $O(N)$ |
-
-## Usage
-- `mapping(f, value)` は作用 $f$ を区間の集約値へ適用する
-- 区間和へ区間加算を載せる場合、値に区間長も保持し、`mapping` で加算量と区間長の積を加える
-- `product(left, right)` と区間版 `apply` は半開区間 $[left,right)$ を扱う
-- `partitionPoint` のpredicateは単位元に対してtrueとなり、積を延長するとtrueからfalseへ単調に変化するものとする
-- 範囲外のindexや不正な区間を渡すとassertionに失敗する
-cpsc:text:end */
-
 // cpsc:subsnippet:start LazySegmentTree
 template <typename T, typename Op, typename F, typename Mapping,
           typename Composition>
@@ -381,3 +297,87 @@ public:
   }
 };
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Requirements
+値の集合を $S$、作用素の集合を $F$ とする。この実装が正しく動作するには、次の条件をすべて満たす必要がある。
+
+### 1. 値のモノイド
+
+`op` と `unit` はモノイド $(S,\operatorname{op},\mathrm{unit})$ をなす。
+
+$$
+\begin{aligned}
+\operatorname{op}&:S\times S\to S,
+&\mathrm{unit}&\in S \\
+\operatorname{op}(\operatorname{op}(a,b),c)
+  &= \operatorname{op}(a,\operatorname{op}(b,c))
+&& (a,b,c\in S) \\
+\operatorname{op}(\mathrm{unit},a)
+  &= \operatorname{op}(a,\mathrm{unit})=a
+&& (a\in S)
+\end{aligned}
+$$
+
+### 2. 作用素のモノイド
+
+`composition` と `identity` はモノイド $(F,\operatorname{composition},\mathrm{identity})$ をなす。`composition(f, g)` は $g$ の後に $f$ を適用する作用を表す。
+
+$$
+\begin{aligned}
+\operatorname{composition}&:F\times F\to F,
+&\mathrm{identity}&\in F \\
+\operatorname{composition}(f,\operatorname{composition}(g,h))
+  &= \operatorname{composition}(\operatorname{composition}(f,g),h)
+&& (f,g,h\in F) \\
+\operatorname{composition}(\mathrm{identity},f)
+  &= \operatorname{composition}(f,\mathrm{identity})=f
+&& (f\in F)
+\end{aligned}
+$$
+
+### 3. 自己準同型による左モノイド作用
+
+`mapping` は $F\times S\to S$ であり、$S$ をleft $F$-actにする。恒等作用を保ち、作用の合成と整合する。
+
+$$
+\begin{aligned}
+\operatorname{mapping}(\mathrm{identity},a)&=a
+&& (a\in S) \\
+\operatorname{mapping}(\operatorname{composition}(f,g),a)
+  &=\operatorname{mapping}(f,\operatorname{mapping}(g,a))
+&& (f,g\in F,\ a\in S)
+\end{aligned}
+$$
+
+さらに各 $f\in F$ が誘導する写像 $\operatorname{mapping}(f,-):S\to S$ は、値のモノイドの自己準同型となる。つまり、単位元と演算を保存する。
+
+$$
+\begin{aligned}
+\operatorname{mapping}(f,\mathrm{unit})&=\mathrm{unit}
+&& (f\in F) \\
+\operatorname{mapping}(f,\operatorname{op}(a,b))
+  &=\operatorname{op}(\operatorname{mapping}(f,a),
+                      \operatorname{mapping}(f,b))
+&& (f\in F,\ a,b\in S)
+\end{aligned}
+$$
+
+左モノイド作用の条件によって遅延作用を合成でき、自己準同型の条件によって作用を各要素へ配らず区間積へ直接適用できる。
+
+## Complexity
+| Operation | Complexity |
+| --- | --- |
+| Construction | $O(N)$ |
+| `set` / `get` / `product` / `apply` / `partitionPoint` / `partitionPointReverse` | $O(\log N)$ |
+| `allProduct` / `size` / `empty` | $O(1)$ |
+| `clear` | $O(N)$ |
+| Space | $O(N)$ |
+
+## Usage
+- `mapping(f, value)` は作用 $f$ を区間の集約値へ適用する
+- 区間和へ区間加算を載せる場合、値に区間長も保持し、`mapping` で加算量と区間長の積を加える
+- `product(left, right)` と区間版 `apply` は半開区間 $[left,right)$ を扱う
+- `partitionPoint` のpredicateは単位元に対してtrueとなり、積を延長するとtrueからfalseへ単調に変化するものとする
+- 範囲外のindexや不正な区間を渡すとassertionに失敗する
+cpsc:text:end */

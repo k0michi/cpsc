@@ -76,7 +76,8 @@
 .lead code,.subsnippet-description code{background:var(--accent-soft);padding:2px 4px;font:inherit}
 .lead a,.subsnippet-description a{text-decoration:underline;text-underline-offset:2px}
 .lead .katex,.subsnippet-description .katex{font-size:1.05em}
-.subsnippet-list{display:grid;gap:34px}
+.notebook{display:grid;gap:34px}
+.notebook .text-block{margin-top:0}
 .code-section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
 .code-section-heading :is(h2,h3){display:flex;gap:12px;margin:0;font:500 12px/1.5 monospace}
 .code-section-heading :is(h2,h3) span{color:#888;font-size:10px;padding-top:2px}
@@ -133,7 +134,7 @@
   .detail{width:100%;min-width:0;max-width:none;padding:28px 18px 72px}
   .detail-header{align-items:flex-start;margin-top:32px;padding-bottom:24px}
   .detail h1{overflow-wrap:anywhere}
-  .subsnippet-list,.test-list{grid-template-columns:minmax(0,1fr);min-width:0}
+  .notebook,.test-list{grid-template-columns:minmax(0,1fr);min-width:0}
   .subsnippet,.test-case{min-width:0;max-width:100%}
   .code-window,.text-block{display:block;width:100%;min-width:0;max-width:100%;box-shadow:4px 4px 0 var(--block-shadow)}
   .code-toolbar{min-width:0;padding:0 12px}

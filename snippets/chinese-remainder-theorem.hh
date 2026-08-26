@@ -12,52 +12,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Problem
-次の2つの合同式を同時に満たす整数 $x$ を求める。
-
-$$
-\begin{aligned}
-x &\equiv r_1 \pmod{m_1} \\
-x &\equiv r_2 \pmod{m_2}
-\end{aligned}
-$$
-
-解が存在する条件は次の通り。
-
-$$
-r_1 \equiv r_2 \pmod{\gcd(m_1,m_2)}
-$$
-
-解が存在する場合、戻り値 $(r,m)$ は全ての解を次の1つの合同式で表す。
-
-$$
-x \equiv r \pmod m,
-\qquad
-m=\operatorname{lcm}(m_1,m_2)
-$$
-
-配列版は合同式 $x \equiv r_i \pmod{m_i}$ を順に統合し、全てを同時に満たす解を求める。
-
-## Algorithm
-拡張Euclid法で2つの法の最大公約数とBézout係数を求め、両方の合同式を満たす係数を計算する。法が互いに素でない場合にも対応し、剰余の差が最大公約数で割り切れなければ解なしと判定する。
-
-配列版は初期値 $x \equiv 0 \pmod 1$ から合同式を順番に統合する。
-
-## Complexity
-| Function | Complexity |
-| --- | --- |
-| Two congruences | $O(\log \min(m_1,m_2))$ |
-| $N$ congruences | $O(N \log M)$ |
-
-## Usage
-- 各法は正の整数とする
-- 戻り値 `(r, m)` は $0 \le r < m$ を満たし、解全体を $x \equiv r \pmod m$ として表す
-- 解が存在しない場合は `std::nullopt` を返す
-- 統合後の法の最小公倍数が `long long` に収まること
-- 係数計算にGCC・Clangの `__int128_t` 拡張を使用する
-cpsc:text:end */
-
 // cpsc:subsnippet:start Chinese Remainder Theorem
 constexpr std::tuple<long long, long long, long long> extendedGCD(long long a,
                                                                   long long b) {
@@ -106,3 +60,49 @@ crt(const std::vector<std::pair<long long, long long>> &congruences) {
   return current;
 }
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Problem
+次の2つの合同式を同時に満たす整数 $x$ を求める。
+
+$$
+\begin{aligned}
+x &\equiv r_1 \pmod{m_1} \\
+x &\equiv r_2 \pmod{m_2}
+\end{aligned}
+$$
+
+解が存在する条件は次の通り。
+
+$$
+r_1 \equiv r_2 \pmod{\gcd(m_1,m_2)}
+$$
+
+解が存在する場合、戻り値 $(r,m)$ は全ての解を次の1つの合同式で表す。
+
+$$
+x \equiv r \pmod m,
+\qquad
+m=\operatorname{lcm}(m_1,m_2)
+$$
+
+配列版は合同式 $x \equiv r_i \pmod{m_i}$ を順に統合し、全てを同時に満たす解を求める。
+
+## Algorithm
+拡張Euclid法で2つの法の最大公約数とBézout係数を求め、両方の合同式を満たす係数を計算する。法が互いに素でない場合にも対応し、剰余の差が最大公約数で割り切れなければ解なしと判定する。
+
+配列版は初期値 $x \equiv 0 \pmod 1$ から合同式を順番に統合する。
+
+## Complexity
+| Function | Complexity |
+| --- | --- |
+| Two congruences | $O(\log \min(m_1,m_2))$ |
+| $N$ congruences | $O(N \log M)$ |
+
+## Usage
+- 各法は正の整数とする
+- 戻り値 `(r, m)` は $0 \le r < m$ を満たし、解全体を $x \equiv r \pmod m$ として表す
+- 解が存在しない場合は `std::nullopt` を返す
+- 統合後の法の最小公倍数が `long long` に収まること
+- 係数計算にGCC・Clangの `__int128_t` 拡張を使用する
+cpsc:text:end */

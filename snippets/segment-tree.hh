@@ -12,53 +12,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Requirements
-値の集合を $S$ とする。この実装が正しく動作するには、`op` と `unit` がモノイド $(S,\operatorname{op},\mathrm{unit})$ をなす必要がある。
-
-`op` は $S$ 上で閉じた二項演算、`unit` は $S$ の要素とする。
-
-$$
-\operatorname{op}:S\times S\to S,
-\qquad
-\mathrm{unit}\in S
-$$
-
-`op` は結合律を満たす。
-
-$$
-\operatorname{op}(\operatorname{op}(a,b),c)
-=\operatorname{op}(a,\operatorname{op}(b,c))
-\qquad (a,b,c\in S)
-$$
-
-`unit` は `op` の単位元となる。
-
-$$
-\operatorname{op}(\mathrm{unit},a)
-=\operatorname{op}(a,\mathrm{unit})
-=a
-\qquad (a\in S)
-$$
-
-これらの条件によって、区間の分割方法によらず同じ積を得られ、空区間を `unit` で表せる。
-
-## Complexity
-| Operation | Complexity |
-| --- | --- |
-| Construction | $O(N)$ |
-| `set` / `product` / `partitionPoint` / `partitionPointReverse` | $O(\log N)$ |
-| `get` / `allProduct` / `size` / `empty` | $O(1)$ |
-| `clear` | $O(N)$ |
-| Space | $O(N)$ |
-
-## Usage
-- 総和と $0$、最小値と $\infty$、最大値と $-\infty$、GCDと $0$、行列積と単位行列、文字列連結と空文字列などが使える
-- `product(left, right)` は半開区間 $[left,right)$ の積を返す
-- `partitionPoint` のpredicateは単位元に対してtrueとなり、積を延長するとtrueからfalseへ単調に変化するものとする
-- 範囲外のindexや不正な区間を渡すとassertionに失敗する
-cpsc:text:end */
-
 // cpsc:subsnippet:start SegmentTree
 template <typename T, typename Op = std::plus<T>> class SegmentTree {
 public:
@@ -231,3 +184,50 @@ public:
   }
 };
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Requirements
+値の集合を $S$ とする。この実装が正しく動作するには、`op` と `unit` がモノイド $(S,\operatorname{op},\mathrm{unit})$ をなす必要がある。
+
+`op` は $S$ 上で閉じた二項演算、`unit` は $S$ の要素とする。
+
+$$
+\operatorname{op}:S\times S\to S,
+\qquad
+\mathrm{unit}\in S
+$$
+
+`op` は結合律を満たす。
+
+$$
+\operatorname{op}(\operatorname{op}(a,b),c)
+=\operatorname{op}(a,\operatorname{op}(b,c))
+\qquad (a,b,c\in S)
+$$
+
+`unit` は `op` の単位元となる。
+
+$$
+\operatorname{op}(\mathrm{unit},a)
+=\operatorname{op}(a,\mathrm{unit})
+=a
+\qquad (a\in S)
+$$
+
+これらの条件によって、区間の分割方法によらず同じ積を得られ、空区間を `unit` で表せる。
+
+## Complexity
+| Operation | Complexity |
+| --- | --- |
+| Construction | $O(N)$ |
+| `set` / `product` / `partitionPoint` / `partitionPointReverse` | $O(\log N)$ |
+| `get` / `allProduct` / `size` / `empty` | $O(1)$ |
+| `clear` | $O(N)$ |
+| Space | $O(N)$ |
+
+## Usage
+- 総和と $0$、最小値と $\infty$、最大値と $-\infty$、GCDと $0$、行列積と単位行列、文字列連結と空文字列などが使える
+- `product(left, right)` は半開区間 $[left,right)$ の積を返す
+- `partitionPoint` のpredicateは単位元に対してtrueとなり、積を延長するとtrueからfalseへ単調に変化するものとする
+- 範囲外のindexや不正な区間を渡すとassertionに失敗する
+cpsc:text:end */

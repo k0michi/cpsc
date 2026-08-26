@@ -12,24 +12,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Semantics
-
-長さ $N$ の列 $S$ に対し、`z(S)[i]`は $S$ と $S[i,N)$ の最長共通接頭辞長を表す。先頭要素は `z(S)[0] = N` とする。
-
-## Complexity
-| Operation | Time | Space |
-| --- | --- | --- |
-| `z(first, last)` | $O(N)$ | $O(N)$ |
-| `z(range)` | $O(N)$ | $O(N)$ |
-
-## Usage
-- 文字列だけでなく、等値比較できる要素を持つrandom-access rangeに使用できる
-- 空のrangeには空のvectorを返す
-- iterator版には同じrangeを指すrandom-access iteratorの半開区間 $[first,last)$ を渡す
-- pattern、区切り、textを連結して適用すると、各位置でのpatternとの一致長を求められる
-cpsc:text:end */
-
 // cpsc:subsnippet:start z
 template <std::random_access_iterator I>
 [[nodiscard]] constexpr std::vector<std::size_t> z(I first, I last) {
@@ -65,3 +47,21 @@ template <typename R>
   return z(std::ranges::begin(range), std::ranges::end(range));
 }
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Semantics
+
+長さ $N$ の列 $S$ に対し、`z(S)[i]`は $S$ と $S[i,N)$ の最長共通接頭辞長を表す。先頭要素は `z(S)[0] = N` とする。
+
+## Complexity
+| Operation | Time | Space |
+| --- | --- | --- |
+| `z(first, last)` | $O(N)$ | $O(N)$ |
+| `z(range)` | $O(N)$ | $O(N)$ |
+
+## Usage
+- 文字列だけでなく、等値比較できる要素を持つrandom-access rangeに使用できる
+- 空のrangeには空のvectorを返す
+- iterator版には同じrangeを指すrandom-access iteratorの半開区間 $[first,last)$ を渡す
+- pattern、区切り、textを連結して適用すると、各位置でのpatternとの一致長を求められる
+cpsc:text:end */

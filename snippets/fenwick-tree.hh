@@ -12,22 +12,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Complexity
-| Operation | Complexity |
-| --- | --- |
-| Construction | $O(N)$ |
-| `add` / `set` / `sum` / `get` | $O(\log N)$ |
-| `lowerBound` / `upperBound` | $O(\log N)$ |
-| Space | $O(N)$ |
-
-## Usage
-- 添字は0-indexed、`sum(left, right)` は半開区間 $[left, right)$ の総和を返す
-- `lowerBound`・`upperBound` は累積和が単調非減少となる場合に限り使用する。通常は全要素が非負であることが必要
-- 境界探索で条件を満たす位置がない場合は `size()` を返す
-- 範囲外の添字はassertionに失敗する
-cpsc:text:end */
-
 // cpsc:subsnippet:start FenwickTree
 // cpsc:subsnippet:description 一点更新、区間和、累積和に対する境界探索を提供する。
 template <typename T = long long> class FenwickTree {
@@ -131,3 +115,19 @@ public:
   }
 };
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Complexity
+| Operation | Complexity |
+| --- | --- |
+| Construction | $O(N)$ |
+| `add` / `set` / `sum` / `get` | $O(\log N)$ |
+| `lowerBound` / `upperBound` | $O(\log N)$ |
+| Space | $O(N)$ |
+
+## Usage
+- 添字は0-indexed、`sum(left, right)` は半開区間 $[left, right)$ の総和を返す
+- `lowerBound`・`upperBound` は累積和が単調非減少となる場合に限り使用する。通常は全要素が非負であることが必要
+- 境界探索で条件を満たす位置がない場合は `size()` を返す
+- 範囲外の添字はassertionに失敗する
+cpsc:text:end */

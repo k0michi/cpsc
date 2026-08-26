@@ -12,21 +12,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Complexity
-| Operation | Complexity |
-| --- | --- |
-| Time | $O(1)$ |
-| Space | $O(1)$ |
-
-## Usage
-- 除数 `b` は0以外であること
-- `floorMod(a, b)` と `ceilMod(a, b)` はそれぞれ $a - q b$ を返す
-- `std::integral`
-には符号なし整数も含まれるが、負の剰余を表現する可能性がある場合は符号付き整数を使用する
-- 符号付き整数の最小値を `-1` で割る操作は未定義動作となる
-cpsc:text:end */
-
 // cpsc:subsnippet:start floorDiv
 template <std::integral T>
 [[nodiscard]] constexpr T floorDiv(T a, T b) noexcept {
@@ -64,3 +49,18 @@ template <std::integral T>
   return (r != 0 && same) ? r - b : r;
 }
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Complexity
+| Operation | Complexity |
+| --- | --- |
+| Time | $O(1)$ |
+| Space | $O(1)$ |
+
+## Usage
+- 除数 `b` は0以外であること
+- `floorMod(a, b)` と `ceilMod(a, b)` はそれぞれ $a - q b$ を返す
+- `std::integral`
+には符号なし整数も含まれるが、負の剰余を表現する可能性がある場合は符号付き整数を使用する
+- 符号付き整数の最小値を `-1` で割る操作は未定義動作となる
+cpsc:text:end */

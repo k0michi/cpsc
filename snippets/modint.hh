@@ -12,25 +12,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Complexity
-| Operation | Complexity |
-| --- | --- |
-| `extendedGCD(a, b)` | $O(\log \min(a, b))$ |
-| Addition / Subtraction / Multiplication | $O(1)$ |
-| Division | $O(\log M)$ |
-| `pow(a, n)` | $O(\log n)$ |
-
-## Usage
-- `extendedGCD(a, b)` は $(\gcd(a,b), x, y)$ を返し、$ax + by = \gcd(a,b)$ を満たす
-- `extendedGCD` には非負整数を渡す
-- `using Mint = ModInt<1'000'000'007>;` のように法をコンパイル時に指定する
-- 構築時と入力時に負数を含む整数を $[0, M)$ へ正規化する
-- $0 < M \leq \mathrm{LLONG\_MAX}$ を満たす法を使用する
-- 除算は除数と $M$ が互いに素な場合に限る。逆元が存在しない場合はassertionに失敗する
-- 乗算の中間値にGCC・Clangの `__uint128_t` 拡張を使用する
-cpsc:text:end */
-
 // cpsc:subsnippet:start ModInt
 // cpsc:subsnippet:description 拡張Euclid法を使い、値の正規化、四則演算、累乗、逆元を提供する。
 constexpr std::tuple<long long, long long, long long> extendedGCD(long long a,
@@ -188,3 +169,22 @@ private:
   unsigned long long mValue;
 };
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Complexity
+| Operation | Complexity |
+| --- | --- |
+| `extendedGCD(a, b)` | $O(\log \min(a, b))$ |
+| Addition / Subtraction / Multiplication | $O(1)$ |
+| Division | $O(\log M)$ |
+| `pow(a, n)` | $O(\log n)$ |
+
+## Usage
+- `extendedGCD(a, b)` は $(\gcd(a,b), x, y)$ を返し、$ax + by = \gcd(a,b)$ を満たす
+- `extendedGCD` には非負整数を渡す
+- `using Mint = ModInt<1'000'000'007>;` のように法をコンパイル時に指定する
+- 構築時と入力時に負数を含む整数を $[0, M)$ へ正規化する
+- $0 < M \leq \mathrm{LLONG\_MAX}$ を満たす法を使用する
+- 除算は除数と $M$ が互いに素な場合に限る。逆元が存在しない場合はassertionに失敗する
+- 乗算の中間値にGCC・Clangの `__uint128_t` 拡張を使用する
+cpsc:text:end */

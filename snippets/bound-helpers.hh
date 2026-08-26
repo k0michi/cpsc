@@ -12,28 +12,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Semantics
-| Function | Result |
-| --- | --- |
-| `floor(x)` | $x$ 以下の最大要素 |
-| `lower(x)` | $x$ 未満の最大要素 |
-| `ceil(x)` | $x$ 以上の最小要素 |
-| `higher(x)` | $x$ より大きい最小要素 |
-
-## Complexity
-| Target | Complexity |
-| --- | --- |
-| Ordered associative container | $O(\log N)$ |
-| Random-access range | $O(\log N)$ |
-
-## Usage
-- コンテナ版は `set`・`multiset`・`map`・`multimap` など、`lower_bound` と `upper_bound` を持つ型に使用する
-- 区間版は比較関数と同じ順序でソートされた半開区間 $[first,last)$ に使用する
-- `floor` と `lower` の区間版には双方向iteratorが必要
-- 条件を満たす要素がない場合は `end()` または `last` を返す
-cpsc:text:end */
-
 // cpsc:subsnippet:start floor(container)
 template <typename C, typename K> typename C::iterator floor(C &c, const K &x) {
   auto it = c.upper_bound(x);
@@ -106,3 +84,25 @@ template <typename F, typename T> F higher(F first, F last, const T &value) {
   return higher(first, last, value, std::less{});
 }
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Semantics
+| Function | Result |
+| --- | --- |
+| `floor(x)` | $x$ 以下の最大要素 |
+| `lower(x)` | $x$ 未満の最大要素 |
+| `ceil(x)` | $x$ 以上の最小要素 |
+| `higher(x)` | $x$ より大きい最小要素 |
+
+## Complexity
+| Target | Complexity |
+| --- | --- |
+| Ordered associative container | $O(\log N)$ |
+| Random-access range | $O(\log N)$ |
+
+## Usage
+- コンテナ版は `set`・`multiset`・`map`・`multimap` など、`lower_bound` と `upper_bound` を持つ型に使用する
+- 区間版は比較関数と同じ順序でソートされた半開区間 $[first,last)$ に使用する
+- `floor` と `lower` の区間版には双方向iteratorが必要
+- 条件を満たす要素がない場合は `end()` または `last` を返す
+cpsc:text:end */

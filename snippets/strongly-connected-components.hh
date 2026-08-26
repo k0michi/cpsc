@@ -15,29 +15,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Algorithm
-Tarjan法を使う。DFSで各頂点の訪問順 `ord`
-と、現在のDFS木から到達できる最小の訪問順 `low` を管理する。`ord[u] == low[u]`
-となる頂点を根として、stack上の頂点を1つの強連結成分へまとめる。
-
-Tarjan法ではシンク側の成分から確定するため、最後に成分列を反転し、縮約後のDAGに対するトポロジカル順で返す。
-
-## Complexity
-| | Complexity |
-| --- | --- |
-| Time | $O(V + E)$ |
-| Space | $O(V)$ |
-
-## Usage
-- 頂点番号は0以上 `g.size()` 未満の連続した整数とする
-- 辺は整数、移動先を `.to`
-に持つ型、または先頭要素が移動先であるtuple-like型に対応する
-- `stronglyConnectedComponents<int>(g)` のように頂点型 `N` を明示する
-- 各成分内の頂点順には依存しない
-- 再帰DFSを使うため、非常に深いグラフではcall stackに注意する
-cpsc:text:end */
-
 // cpsc:subsnippet:start Strongly Connected Components
 template <typename E> constexpr auto getEdgeTarget(const E &e) {
   if constexpr (std::is_integral_v<std::decay_t<E>>) {
@@ -101,3 +78,26 @@ stronglyConnectedComponents(const G &g) {
   return groups;
 }
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Algorithm
+Tarjan法を使う。DFSで各頂点の訪問順 `ord`
+と、現在のDFS木から到達できる最小の訪問順 `low` を管理する。`ord[u] == low[u]`
+となる頂点を根として、stack上の頂点を1つの強連結成分へまとめる。
+
+Tarjan法ではシンク側の成分から確定するため、最後に成分列を反転し、縮約後のDAGに対するトポロジカル順で返す。
+
+## Complexity
+| | Complexity |
+| --- | --- |
+| Time | $O(V + E)$ |
+| Space | $O(V)$ |
+
+## Usage
+- 頂点番号は0以上 `g.size()` 未満の連続した整数とする
+- 辺は整数、移動先を `.to`
+に持つ型、または先頭要素が移動先であるtuple-like型に対応する
+- `stronglyConnectedComponents<int>(g)` のように頂点型 `N` を明示する
+- 各成分内の頂点順には依存しない
+- 再帰DFSを使うため、非常に深いグラフではcall stackに注意する
+cpsc:text:end */

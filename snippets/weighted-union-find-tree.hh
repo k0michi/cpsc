@@ -15,23 +15,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Complexity
-| Operation | Complexity |
-| --- | --- |
-| `leader` / `weight` / `unite` / `same` / `diff` / `size(x)` | Amortized $O(\alpha(N))$ |
-| `clear` | $O(N)$ |
-| Space | $O(N)$ |
-
-## Usage
-- `unite(x, y, w)` は $V(y)-V(x)=w$ という差分制約を追加する
-- 戻り値 `{consistent, merged, leader}` は、制約が既存情報と矛盾しないか、新しく集合を結合したか、結合後の代表元を表す
-- `diff(x, y)` は連結なら $V(y)-V(x)$、未連結なら `std::nullopt` を返す
-- 重み型は加算、減算、単項マイナス、等値比較、加法単位元を持つものとする
-- 要素は0以上 `size()` 未満の整数で表す
-- 範囲外の要素を渡すとassertionに失敗する
-cpsc:text:end */
-
 // cpsc:subsnippet:start WeightedUnionFindTree
 template <typename T = long long> class WeightedUnionFindTree {
 public:
@@ -129,3 +112,20 @@ public:
   }
 };
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Complexity
+| Operation | Complexity |
+| --- | --- |
+| `leader` / `weight` / `unite` / `same` / `diff` / `size(x)` | Amortized $O(\alpha(N))$ |
+| `clear` | $O(N)$ |
+| Space | $O(N)$ |
+
+## Usage
+- `unite(x, y, w)` は $V(y)-V(x)=w$ という差分制約を追加する
+- 戻り値 `{consistent, merged, leader}` は、制約が既存情報と矛盾しないか、新しく集合を結合したか、結合後の代表元を表す
+- `diff(x, y)` は連結なら $V(y)-V(x)$、未連結なら `std::nullopt` を返す
+- 重み型は加算、減算、単項マイナス、等値比較、加法単位元を持つものとする
+- 要素は0以上 `size()` 未満の整数で表す
+- 範囲外の要素を渡すとassertionに失敗する
+cpsc:text:end */

@@ -15,21 +15,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Complexity
-| Function | Complexity |
-| --- | --- |
-| `topologicalSort` | $O(V + E)$ |
-| `lexicographicalTopologicalSort` | $O(V \log V + E)$ |
-| Space | $O(V)$ |
-
-## Usage
-- 頂点番号は0以上 `g.size()` 未満の連続した整数とする
-- 辺は整数、移動先を `.to` に持つ型、または先頭要素が移動先であるtuple-like型に対応する
-- 閉路が存在する場合は `std::nullopt` を返す
-- `topologicalSort<int>(g)` のように、頂点数と全頂点番号を表現できる `N` を明示する
-cpsc:text:end */
-
 // cpsc:subsnippet:start Topological Sort
 template <typename E> constexpr auto getEdgeTarget(const E &e) {
   if constexpr (std::is_integral_v<std::decay_t<E>>) {
@@ -124,3 +109,18 @@ lexicographicalTopologicalSort(const G &g) {
   return order;
 }
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Complexity
+| Function | Complexity |
+| --- | --- |
+| `topologicalSort` | $O(V + E)$ |
+| `lexicographicalTopologicalSort` | $O(V \log V + E)$ |
+| Space | $O(V)$ |
+
+## Usage
+- 頂点番号は0以上 `g.size()` 未満の連続した整数とする
+- 辺は整数、移動先を `.to` に持つ型、または先頭要素が移動先であるtuple-like型に対応する
+- 閉路が存在する場合は `std::nullopt` を返す
+- `topologicalSort<int>(g)` のように、頂点数と全頂点番号を表現できる `N` を明示する
+cpsc:text:end */

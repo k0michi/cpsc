@@ -24,12 +24,17 @@ export default function SnippetPage({ loaderData }: Route.ComponentProps) {
         <span className="language-badge">{snippet.language.name} {snippet.language.version}</span>
       </header>
       <MarkdownContent source={snippet.description} className="lead" />
-      <div className="subsnippet-list">
-        {snippet.subsnippets.map((subsnippet, index) => (
-          <section className="subsnippet" key={subsnippet.title}>
+      <div className="notebook">
+        {snippet.blocks.map((block, index) => {
+          if (block.type === "text") {
+            return <TextBlock source={block.source} key={`text:${index}`} />;
+          }
+          const subsnippet = snippet.subsnippets[block.subsnippetIndex];
+          return (
+          <section className="subsnippet" key={`code:${block.subsnippetIndex}`}>
             <header className="code-section-heading">
               <h2>
-                <span>{String(index + 1).padStart(2, "0")}</span>
+                <span>{String(block.subsnippetIndex + 1).padStart(2, "0")}</span>
                 {subsnippet.title}
               </h2>
             </header>
@@ -43,9 +48,9 @@ export default function SnippetPage({ loaderData }: Route.ComponentProps) {
               language={snippet.language}
             />
           </section>
-        ))}
+          );
+        })}
       </div>
-      <TextBlock source={snippet.text} />
       {snippet.validation && snippet.validation.length > 0 && (
         <section className="validation-section">
           <header className="test-heading">

@@ -12,6 +12,23 @@ cpsc:meta:end */
 
 #pragma once
 
+// cpsc:subsnippet:start binaryPow
+template <typename T, std::integral E>
+[[nodiscard]] constexpr T binaryPow(T base, E exp) {
+  T result = 1;
+  while (exp > 0) {
+    if (exp & 1) {
+      result *= base;
+    }
+    if (exp > 1) {
+      base *= base;
+    }
+    exp >>= 1;
+  }
+  return result;
+}
+// cpsc:subsnippet:end
+
 /* cpsc:text:start
 ## Algorithm
 Binary Exponentiation。指数を2進数として下位ビットから調べ、ビットが1なら現在の `base` を結果へ掛ける。各反復で `base` を二乗するため、$base^{2^i}$ を順に利用できる。
@@ -31,20 +48,3 @@ Binary Exponentiationは整数に限らず、単位元と結合則を満たす�
 - `T` は `1` から初期化でき、結合的な乗算と `operator*=` を持つ型とする
 - 整数型では計算途中のオーバーフローに注意する
 cpsc:text:end */
-
-// cpsc:subsnippet:start binaryPow
-template <typename T, std::integral E>
-[[nodiscard]] constexpr T binaryPow(T base, E exp) {
-  T result = 1;
-  while (exp > 0) {
-    if (exp & 1) {
-      result *= base;
-    }
-    if (exp > 1) {
-      base *= base;
-    }
-    exp >>= 1;
-  }
-  return result;
-}
-// cpsc:subsnippet:end

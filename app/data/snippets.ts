@@ -15,6 +15,7 @@ export type Snippet = {
   validation?: Validation[] | null;
   code: string;
   subsnippets: Subsnippet[];
+  blocks: SnippetBlock[];
   sourceFile: string;
   tests: TestCase[];
 };
@@ -29,6 +30,10 @@ export type Subsnippet = {
   description?: string | null;
   code: string;
 };
+
+export type SnippetBlock =
+  | { type: "text"; source: string }
+  | { type: "code"; subsnippetIndex: number };
 
 export type TestCase = {
   title: string;
@@ -61,7 +66,7 @@ function parseSnippet(path: string, source: string): Omit<Snippet, "tests"> {
 
   const metadata = parse(match[1]) as Omit<
     Snippet,
-    "code" | "subsnippets" | "sourceFile" | "tests"
+    "code" | "subsnippets" | "blocks" | "sourceFile" | "tests"
   >;
   const required = [
     metadata.slug,
@@ -83,29 +88,42 @@ function parseSnippet(path: string, source: string): Omit<Snippet, "tests"> {
   ) {
     throw new Error(`Snippet validation metadata is incomplete: ${path}`);
   }
-  const textMatch = source.match(
-    /\/\* cpsc:text:start\r?\n([\s\S]*?)\s*cpsc:text:end \*\//,
-  );
   const rawCode = source.slice(match[0].length).trimStart();
+  const textBlockPattern =
+    /\/\* cpsc:text:start\r?\n([\s\S]*?)\s*cpsc:text:end \*\//gm;
   const subsnippetPattern =
     /^\/\/ cpsc:subsnippet:start (.+)\r?\n(?:\/\/ cpsc:subsnippet:description (.+)\r?\n)?([\s\S]*?)^\/\/ cpsc:subsnippet:end\s*$/gm;
-  const subsnippets = Array.from(
-    rawCode.matchAll(subsnippetPattern),
-    (subsnippet) => ({
+  const subsnippetMatches = Array.from(rawCode.matchAll(subsnippetPattern));
+  const subsnippets = subsnippetMatches.map((subsnippet) => ({
       title: subsnippet[1].trim(),
       description: subsnippet[2]?.trim() || null,
       code: subsnippet[3].trim(),
-    }),
-  );
+    }));
   if (subsnippets.length === 0) {
     throw new Error(`At least one subsnippet is required: ${path}`);
   }
+  const textMatches = Array.from(rawCode.matchAll(textBlockPattern));
+  const blocks: SnippetBlock[] = [
+    ...textMatches.map((text) => ({
+      type: "text" as const,
+      source: text[1].trim(),
+      position: text.index,
+    })),
+    ...subsnippetMatches.map((subsnippet, subsnippetIndex) => ({
+      type: "code" as const,
+      subsnippetIndex,
+      position: subsnippet.index,
+    })),
+  ]
+    .sort((a, b) => a.position - b.position)
+    .map(({ position: _, ...block }) => block);
 
   return {
     ...metadata,
-    text: textMatch?.[1].trim() || null,
+    text: textMatches.map((text) => text[1].trim()).join("\n\n") || null,
     code: subsnippets.map((subsnippet) => subsnippet.code).join("\n\n"),
     subsnippets,
+    blocks,
     sourceFile: path.split("/").at(-1) ?? path,
   };
 }

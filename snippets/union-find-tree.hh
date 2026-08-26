@@ -15,22 +15,6 @@ cpsc:meta:end */
 
 #pragma once
 
-/* cpsc:text:start
-## Complexity
-| Operation | Complexity |
-| --- | --- |
-| `leader` / `unite` / `same` / `size(x)` | Amortized $O(\alpha(N))$ |
-| `groups` / `clear` / `resize` | $O(N)$ |
-| Space | $O(N)$ |
-
-## Usage
-- 要素は0以上 `size()` 未満の整数で表す
-- `unite(x, y)` は `{merged, leader}` を返す。`merged` は新しく結合したか、`leader` は結合後の代表元を表す
-- `leader` はconst関数だが、経路圧縮のため内部状態を変更する
-- `groups()` が返すグループや要素の順序に依存しない
-- 範囲外の要素を渡すとassertionに失敗する
-cpsc:text:end */
-
 // cpsc:subsnippet:start UnionFindTree
 class UnionFindTree {
 public:
@@ -134,3 +118,19 @@ public:
   }
 };
 // cpsc:subsnippet:end
+
+/* cpsc:text:start
+## Complexity
+| Operation | Complexity |
+| --- | --- |
+| `leader` / `unite` / `same` / `size(x)` | Amortized $O(\alpha(N))$ |
+| `groups` / `clear` / `resize` | $O(N)$ |
+| Space | $O(N)$ |
+
+## Usage
+- 要素は0以上 `size()` 未満の整数で表す
+- `unite(x, y)` は `{merged, leader}` を返す。`merged` は新しく結合したか、`leader` は結合後の代表元を表す
+- `leader` はconst関数だが、経路圧縮のため内部状態を変更する
+- `groups()` が返すグループや要素の順序に依存しない
+- 範囲外の要素を渡すとassertionに失敗する
+cpsc:text:end */
