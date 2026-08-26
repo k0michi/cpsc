@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 import { categories, snippets } from "../data/snippets";
 import { categoryHueStyle, hueFromCategory } from "../utils/category-color";
 
@@ -11,8 +11,10 @@ export function AppShell({
   category?: string;
 }) {
   const [query, setQuery] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const shellRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const location = useLocation();
   const visibleSnippets = useMemo(() => {
     const term = query.trim().toLowerCase();
     if (!term) return snippets;
@@ -32,6 +34,24 @@ export function AppShell({
     window.addEventListener("keydown", focusSearch);
     return () => window.removeEventListener("keydown", focusSearch);
   }, []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    function closeMenu(event: KeyboardEvent) {
+      if (event.key === "Escape") setMenuOpen(false);
+    }
+    document.body.classList.add("menu-open");
+    window.addEventListener("keydown", closeMenu);
+    return () => {
+      document.body.classList.remove("menu-open");
+      window.removeEventListener("keydown", closeMenu);
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     function positionSidebar() {
@@ -62,6 +82,18 @@ export function AppShell({
           <strong>CPSC</strong>
           <span className="brand-full">Competitive Programming Snippet Collection</span>
         </Link>
+        <button
+          type="button"
+          className="menu-toggle"
+          aria-label={menuOpen ? "メニューを閉じる" : "メニューを開く"}
+          aria-controls="snippet-navigation"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
         <a
           className="github-link"
           href="https://github.com/k0michi/cpsc"
@@ -72,8 +104,18 @@ export function AppShell({
           k0michi/cpsc ↗
         </a>
       </header>
+      <button
+        type="button"
+        className={`menu-backdrop ${menuOpen ? "open" : ""}`}
+        aria-label="メニューを閉じる"
+        tabIndex={menuOpen ? 0 : -1}
+        onClick={() => setMenuOpen(false)}
+      />
       <div className="workspace">
-        <aside className="sidebar">
+        <aside
+          id="snippet-navigation"
+          className={`sidebar ${menuOpen ? "open" : ""}`}
+        >
           <div className="sidebar-search">
             <input
               ref={searchRef}
