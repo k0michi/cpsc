@@ -71,6 +71,11 @@
 .detail-header{margin-top:34px}
 .detail h1{font-size:clamp(34px,5vw,56px);letter-spacing:-.045em}
 .lead{margin:20px 0 28px}
+.lead>:first-child,.subsnippet-description>:first-child{margin-top:0}
+.lead>:last-child,.subsnippet-description>:last-child{margin-bottom:0}
+.lead code,.subsnippet-description code{background:var(--accent-soft);padding:2px 4px;font:inherit}
+.lead a,.subsnippet-description a{text-decoration:underline;text-underline-offset:2px}
+.lead .katex,.subsnippet-description .katex{font-size:1.05em}
 .subsnippet-list{display:grid;gap:34px}
 .code-section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
 .code-section-heading :is(h2,h3){display:flex;gap:12px;margin:0;font:500 12px/1.5 monospace}

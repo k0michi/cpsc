@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import type { Route } from "./+types/snippets.$slug";
 import { AppShell } from "../components/app-shell";
 import { CodeBlock } from "../components/code-block";
-import { TextBlock } from "../components/text-block";
+import { MarkdownContent, TextBlock } from "../components/text-block";
 import { findSnippet } from "../data/snippets";
 
 export function loader({ params }: Route.LoaderArgs) {
@@ -23,7 +23,7 @@ export default function SnippetPage({ loaderData }: Route.ComponentProps) {
         <div><p className="eyebrow lime">{snippet.category.toUpperCase()}</p><h1>{snippet.title}</h1></div>
         <span className="language-badge">{snippet.language.name} {snippet.language.version}</span>
       </header>
-      {snippet.description && <p className="lead">{snippet.description}</p>}
+      <MarkdownContent source={snippet.description} className="lead" />
       <div className="subsnippet-list">
         {snippet.subsnippets.map((subsnippet, index) => (
           <section className="subsnippet" key={subsnippet.title}>
@@ -33,9 +33,10 @@ export default function SnippetPage({ loaderData }: Route.ComponentProps) {
                 {subsnippet.title}
               </h2>
             </header>
-            {subsnippet.description && (
-              <p className="subsnippet-description">{subsnippet.description}</p>
-            )}
+            <MarkdownContent
+              source={subsnippet.description}
+              className="subsnippet-description"
+            />
             <CodeBlock
               code={subsnippet.code}
               filename={snippet.sourceFile}
