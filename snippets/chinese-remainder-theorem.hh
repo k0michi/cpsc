@@ -10,6 +10,8 @@ language:
   prism: cpp
 cpsc:meta:end */
 
+#pragma once
+
 /* cpsc:text:start
 ## Problem
 次の2つの合同式を同時に満たす整数 $x$ を求める。

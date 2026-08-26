@@ -10,6 +10,8 @@ language:
   prism: cpp
 cpsc:meta:end */
 
+#pragma once
+
 /* cpsc:text:start
 ## Complexity
 | Operation | Complexity |

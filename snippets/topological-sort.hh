@@ -13,6 +13,8 @@ validation:
     url: https://onlinejudge.u-aizu.ac.jp/status/users/k0michi/submissions/1/GRL_4_B/judge/11666280/C++23
 cpsc:meta:end */
 
+#pragma once
+
 /* cpsc:text:start
 ## Complexity
 | Function | Complexity |

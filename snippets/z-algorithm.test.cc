@@ -4,8 +4,8 @@ cpsc:meta:end */
 
 #include <array>
 
-#include "test-support.hpp"
-#include "z-algorithm.cpp"
+#include "test-support.hh"
+#include "z-algorithm.hh"
 
 // cpsc:test:start
 TEST(ZAlgorithm, ComputesPrefixMatches) {

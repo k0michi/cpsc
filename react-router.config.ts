@@ -11,7 +11,7 @@ const basePath = (
 const snippetDirectory = resolve("snippets");
 const snippetPaths = readdirSync(snippetDirectory)
   .filter(
-    (filename) => filename.endsWith(".cpp") && !filename.endsWith(".test.cpp"),
+    (filename) => filename.endsWith(".hh") && filename !== "test-support.hh",
   )
   .map((filename) => {
     const source = readFileSync(resolve(snippetDirectory, filename), "utf8");

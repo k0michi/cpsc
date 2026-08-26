@@ -2,8 +2,8 @@
 snippet: binary-exponentiation
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "binary-exponentiation.cpp"
+#include "test-support.hh"
+#include "binary-exponentiation.hh"
 
 // cpsc:test:start
 TEST(BinaryPow, ComputesNonnegativePowers) {

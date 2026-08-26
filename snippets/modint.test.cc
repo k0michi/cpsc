@@ -2,8 +2,8 @@
 snippet: modint
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "modint.cpp"
+#include "test-support.hh"
+#include "modint.hh"
 
 using Mint = ModInt<1'000'000'007>;
 

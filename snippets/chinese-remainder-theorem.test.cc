@@ -2,8 +2,8 @@
 snippet: chinese-remainder-theorem
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "chinese-remainder-theorem.cpp"
+#include "test-support.hh"
+#include "chinese-remainder-theorem.hh"
 
 // cpsc:test:start
 TEST(ChineseRemainderTheorem, MergesCoprimeCongruences) {

@@ -2,8 +2,8 @@
 snippet: lazy-segment-tree
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "lazy-segment-tree.cpp"
+#include "test-support.hh"
+#include "lazy-segment-tree.hh"
 
 // cpsc:test:start
 TEST(LazySegmentTree, AppliesRangeUpdatesAndQueriesProducts) {

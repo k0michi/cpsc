@@ -15,7 +15,7 @@ set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 enable_testing()
-file(GLOB SNIPPET_TEST_SOURCES CONFIGURE_DEPENDS snippets/*.test.cpp)
+file(GLOB SNIPPET_TEST_SOURCES CONFIGURE_DEPENDS snippets/*.test.cc)
 add_executable(snippet_tests ${SNIPPET_TEST_SOURCES})
 target_include_directories(snippet_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(snippet_tests PRIVATE GTest::gtest_main)

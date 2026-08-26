@@ -10,6 +10,8 @@ language:
   prism: cpp
 cpsc:meta:end */
 
+#pragma once
+
 /* cpsc:text:start
 ## Algorithm
 Binary Exponentiation。指数を2進数として下位ビットから調べ、ビットが1なら現在の `base` を結果へ掛ける。各反復で `base` を二乗するため、$base^{2^i}$ を順に利用できる。

@@ -2,8 +2,8 @@
 snippet: strongly-connected-components
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "strongly-connected-components.cpp"
+#include "test-support.hh"
+#include "strongly-connected-components.hh"
 
 // cpsc:test:start
 TEST(StronglyConnectedComponents, DecomposesGraphInTopologicalOrder) {

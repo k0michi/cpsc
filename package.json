@@ -6,8 +6,8 @@
     "build": "react-router build",
     "build:pages": "react-router build && node scripts/prepare-pages.mjs",
     "dev": "react-router dev",
-    "format:cpp": "clang-format -i snippets/*.cpp",
-    "format:cpp:check": "clang-format --dry-run --Werror snippets/*.cpp",
+    "format:cpp": "clang-format -i snippets/*.hh snippets/*.cc",
+    "format:cpp:check": "clang-format --dry-run --Werror snippets/*.hh snippets/*.cc",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
   },

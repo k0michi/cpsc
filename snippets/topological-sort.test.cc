@@ -2,8 +2,8 @@
 snippet: topological-sort
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "topological-sort.cpp"
+#include "test-support.hh"
+#include "topological-sort.hh"
 
 // cpsc:test:start
 TEST(TopologicalSort, SortsGraphWithIntegralEdges) {

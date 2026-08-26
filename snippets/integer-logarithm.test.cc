@@ -2,8 +2,8 @@
 snippet: integer-logarithm
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "integer-logarithm.cpp"
+#include "test-support.hh"
+#include "integer-logarithm.hh"
 
 // cpsc:test:start
 TEST(IntegerLogarithm, HandlesBinaryBoundaries) {

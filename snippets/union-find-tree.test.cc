@@ -2,8 +2,8 @@
 snippet: union-find-tree
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "union-find-tree.cpp"
+#include "test-support.hh"
+#include "union-find-tree.hh"
 
 // cpsc:test:start
 TEST(UnionFindTree, UnitesAndQueriesComponents) {

@@ -10,6 +10,8 @@ language:
   prism: cpp
 cpsc:meta:end */
 
+#pragma once
+
 /* cpsc:text:start
 ## Requirements
 値の集合を $S$ とする。この実装が正しく動作するには、`op` と `unit` がモノイド $(S,\operatorname{op},\mathrm{unit})$ をなす必要がある。

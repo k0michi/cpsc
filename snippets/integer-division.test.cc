@@ -2,8 +2,8 @@
 snippet: integer-division
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "integer-division.cpp"
+#include "test-support.hh"
+#include "integer-division.hh"
 
 // cpsc:test:start
 TEST(IntegerDivision, RoundsQuotientsInTheRequestedDirection) {

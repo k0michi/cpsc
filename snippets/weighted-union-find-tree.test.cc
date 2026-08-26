@@ -2,8 +2,8 @@
 snippet: weighted-union-find-tree
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "weighted-union-find-tree.cpp"
+#include "test-support.hh"
+#include "weighted-union-find-tree.hh"
 
 // cpsc:test:start
 TEST(WeightedUnionFindTree, MaintainsPotentialDifferences) {

@@ -13,6 +13,8 @@ validation:
     url: https://atcoder.jp/contests/typical90/submissions/78663056
 cpsc:meta:end */
 
+#pragma once
+
 /* cpsc:text:start
 ## Algorithm
 Tarjan法を使う。DFSで各頂点の訪問順 `ord`

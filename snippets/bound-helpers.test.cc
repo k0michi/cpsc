@@ -2,8 +2,8 @@
 snippet: bound-helpers
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "bound-helpers.cpp"
+#include "test-support.hh"
+#include "bound-helpers.hh"
 
 // cpsc:test:start
 TEST(BoundHelpers, FindsAllBoundsInSet) {

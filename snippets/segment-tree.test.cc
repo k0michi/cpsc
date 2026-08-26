@@ -2,8 +2,8 @@
 snippet: segment-tree
 cpsc:meta:end */
 
-#include "test-support.hpp"
-#include "segment-tree.cpp"
+#include "test-support.hh"
+#include "segment-tree.hh"
 
 // cpsc:test:start
 TEST(SegmentTree, BuildsQueriesAndUpdatesProducts) {

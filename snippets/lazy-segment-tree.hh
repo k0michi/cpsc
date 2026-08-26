@@ -10,6 +10,8 @@ language:
   prism: cpp
 cpsc:meta:end */
 
+#pragma once
+
 /* cpsc:text:start
 ## Requirements
 値の集合を $S$、作用素の集合を $F$ とする。この実装が正しく動作するには、次の条件をすべて満たす必要がある。
