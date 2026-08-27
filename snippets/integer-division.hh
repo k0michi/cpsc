@@ -115,39 +115,45 @@ $$
 - 符号付き整数の最小値を `-1` で割る操作は未定義動作となる
 cpsc:text:end */
 
-// cpsc:subsnippet:start floorDivNonnegative / floorModNonnegative
+// cpsc:subsnippet:start floorDivNonnegative
 template <std::integral T>
 [[nodiscard]] constexpr T floorDivNonnegative(T a, T b) noexcept {
   return a / b;
 }
+// cpsc:subsnippet:end
 
+// cpsc:subsnippet:start floorModNonnegative
 template <std::integral T>
 [[nodiscard]] constexpr T floorModNonnegative(T a, T b) noexcept {
   return a % b;
 }
 // cpsc:subsnippet:end
 
-// cpsc:subsnippet:start ceilDivNonnegative / ceilModNonnegative
+// cpsc:subsnippet:start ceilDivNonnegative
 template <std::integral T>
 [[nodiscard]] constexpr T ceilDivNonnegative(T a, T b) noexcept {
   return (a + b - 1) / b;
 }
+// cpsc:subsnippet:end
 
+// cpsc:subsnippet:start ceilModNonnegative
 template <std::integral T>
 [[nodiscard]] constexpr T ceilModNonnegative(T a, T b) noexcept {
-  return a - ceilDivNonnegative(a, b) * b;
+  return a - ((a + b - 1) / b) * b;
 }
 // cpsc:subsnippet:end
 
-// cpsc:subsnippet:start roundDivNonnegative / roundModNonnegative
+// cpsc:subsnippet:start roundDivNonnegative
 template <std::integral T>
 [[nodiscard]] constexpr T roundDivNonnegative(T a, T b) noexcept {
   return (a + b / 2) / b;
 }
+// cpsc:subsnippet:end
 
+// cpsc:subsnippet:start roundModNonnegative
 template <std::integral T>
 [[nodiscard]] constexpr T roundModNonnegative(T a, T b) noexcept {
-  return a - roundDivNonnegative(a, b) * b;
+  return a - ((a + b / 2) / b) * b;
 }
 // cpsc:subsnippet:end
 
