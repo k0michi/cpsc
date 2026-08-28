@@ -61,15 +61,33 @@ concept HashBuilder = requires(B &builder, std::uint64_t value) {
 inline constexpr std::uint64_t TupleHashTag = 0x243f6a8885a308d3ULL;
 inline constexpr std::uint64_t RangeHashTag = 0x13198a2e03707344ULL;
 
-template <HashBuilder B, std::integral T>
+template <typename T>
+concept HashIntegral = std::integral<T>
+#if defined(__SIZEOF_INT128__)
+                       || std::same_as<std::remove_cv_t<T>, __int128> ||
+                       std::same_as<std::remove_cv_t<T>, unsigned __int128>
+#endif
+    ;
+
+template <HashBuilder B, HashIntegral T>
 constexpr void hashAppend(B &builder, T value) noexcept {
   if constexpr (sizeof(T) <= sizeof(std::uint64_t)) {
     builder.append(static_cast<std::uint64_t>(value));
   } else {
-    using U = std::make_unsigned_t<T>;
-    U bits = static_cast<U>(value);
-    builder.append(static_cast<std::uint64_t>(bits));
-    builder.append(static_cast<std::uint64_t>(bits >> 64));
+#if defined(__SIZEOF_INT128__)
+    if constexpr (std::same_as<std::remove_cv_t<T>, __int128> ||
+                  std::same_as<std::remove_cv_t<T>, unsigned __int128>) {
+      unsigned __int128 bits = static_cast<unsigned __int128>(value);
+      builder.append(static_cast<std::uint64_t>(bits));
+      builder.append(static_cast<std::uint64_t>(bits >> 64));
+    } else
+#endif
+    {
+      using U = std::make_unsigned_t<T>;
+      U bits = static_cast<U>(value);
+      builder.append(static_cast<std::uint64_t>(bits));
+      builder.append(static_cast<std::uint64_t>(bits >> 64));
+    }
   }
 }
 
