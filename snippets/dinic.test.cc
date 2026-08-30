@@ -18,7 +18,7 @@ TEST(Dinic, FindsMaximumFlow) {
   dinic.addEdge(4, 3, 6);
   dinic.addEdge(4, 5, 10);
 
-  EXPECT_EQ(dinic.maxFlow(0, 5), 19);
+  EXPECT_EQ(dinic.flow(0, 5), 19);
 }
 // cpsc:test:end
 
@@ -30,7 +30,7 @@ TEST(Dinic, SupportsParallelAndReverseEdges) {
   dinic.addEdge(1, 0, 7);
   dinic.addEdge(1, 2, 5);
 
-  EXPECT_EQ(dinic.maxFlow(0, 2), 5);
+  EXPECT_EQ(dinic.flow(0, 2), 5);
 }
 // cpsc:test:end
 
@@ -42,9 +42,9 @@ TEST(Dinic, SupportsFlowLimitAndRepeatedCalls) {
   dinic.addEdge(1, 3, 4);
   dinic.addEdge(2, 3, 3);
 
-  EXPECT_EQ(dinic.maxFlow(0, 3, 5), 5);
-  EXPECT_EQ(dinic.maxFlow(0, 3), 2);
-  EXPECT_EQ(dinic.maxFlow(0, 3), 0);
+  EXPECT_EQ(dinic.flow(0, 3, 5), 5);
+  EXPECT_EQ(dinic.flow(0, 3), 2);
+  EXPECT_EQ(dinic.flow(0, 3), 0);
 }
 // cpsc:test:end
 
@@ -52,8 +52,8 @@ TEST(Dinic, SupportsFlowLimitAndRepeatedCalls) {
 TEST(Dinic, HandlesDisconnectedAndSameVertices) {
   DinicGraph<unsigned int, unsigned int> disconnected(3);
   disconnected.addEdge(0, 1, 10);
-  EXPECT_EQ(disconnected.maxFlow(0, 2), 0U);
-  EXPECT_EQ(disconnected.maxFlow(1, 1), 0U);
+  EXPECT_EQ(disconnected.flow(0, 2), 0U);
+  EXPECT_EQ(disconnected.flow(1, 1), 0U);
 }
 // cpsc:test:end
 
@@ -66,7 +66,7 @@ TEST(Dinic, HandlesSelfLoops) {
   dinic.addEdge(1, 2, 3);
   dinic.addEdge(2, 2, 100);
 
-  EXPECT_EQ(dinic.maxFlow(0, 2), 3);
+  EXPECT_EQ(dinic.flow(0, 2), 3);
 }
 // cpsc:test:end
 
@@ -78,7 +78,7 @@ TEST(Dinic, FindsMinimumCutAfterMaximumFlow) {
   dinic.addEdge(1, 3, 1);
   dinic.addEdge(2, 3, 1);
 
-  EXPECT_EQ(dinic.maxFlow(0, 3), 2);
+  EXPECT_EQ(dinic.flow(0, 3), 2);
   EXPECT_EQ(dinic.minCut(0), (std::vector<bool>{true, true, false, false}));
 }
 // cpsc:test:end
@@ -94,7 +94,7 @@ TEST(Dinic, ReturnsEdgeIdsAndExposesEdges) {
   EXPECT_EQ(dinic.vertexCount(), 3U);
   EXPECT_EQ(dinic.edgeCount(), 2U);
 
-  EXPECT_EQ(dinic.maxFlow(0, 2), 3);
+  EXPECT_EQ(dinic.flow(0, 2), 3);
   auto edge = dinic.edge(first);
   EXPECT_EQ(edge.from, 0U);
   EXPECT_EQ(edge.to, 1U);
@@ -108,16 +108,16 @@ TEST(Dinic, SetsCapacityAndClearsFlow) {
   DinicGraph<int, int> dinic(2);
   auto edgeIndex = dinic.addEdge(0, 1, 3);
 
-  EXPECT_EQ(dinic.maxFlow(0, 1), 3);
+  EXPECT_EQ(dinic.flow(0, 1), 3);
   dinic.setCapacity(edgeIndex, 5);
   EXPECT_EQ(dinic.edge(edgeIndex).capacity, 5);
   EXPECT_EQ(dinic.edge(edgeIndex).flow, 3);
-  EXPECT_EQ(dinic.maxFlow(0, 1), 2);
+  EXPECT_EQ(dinic.flow(0, 1), 2);
 
   dinic.clearFlow();
   EXPECT_EQ(dinic.edge(edgeIndex).capacity, 5);
   EXPECT_EQ(dinic.edge(edgeIndex).flow, 0);
-  EXPECT_EQ(dinic.maxFlow(0, 1), 5);
+  EXPECT_EQ(dinic.flow(0, 1), 5);
 }
 // cpsc:test:end
 

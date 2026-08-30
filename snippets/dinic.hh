@@ -138,8 +138,8 @@ public:
     }
   }
 
-  [[nodiscard]] C maxFlow(N source, N sink,
-                          C flowLimit = std::numeric_limits<C>::max()) {
+  [[nodiscard]] C flow(N source, N sink,
+                       C flowLimit = std::numeric_limits<C>::max()) {
     if (source == sink) {
       return C{};
     }
@@ -195,7 +195,7 @@ public:
 - `setCapacity(edgeIndex, capacity)` で現在流量以上の新しい容量を設定できる
 - `clearFlow()` は全辺の流量を0に戻し、設定された容量を維持する
 - 容量は0以上とする
-- `maxFlow(source, sink)` は残余グラフ上で最大流を追加し、その呼び出しで流した量を返す
+- `flow(source, sink)` は残余グラフ上で最大流を追加し、その呼び出しで流した量を返す
 - 第3引数を指定すると、その値を上限として流す
 - `minCut(source)` は残余グラフでsourceから到達可能な頂点をtrueとする配列を返す
 - 頂点番号は0以上 `vertexCount` 未満の連続した整数とする
