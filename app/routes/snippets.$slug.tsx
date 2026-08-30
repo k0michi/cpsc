@@ -73,7 +73,7 @@ export default function SnippetPage({ loaderData }: Route.ComponentProps) {
           </div>
         </section>
       )}
-      <section className="test-section">
+      {snippet.tests.length > 0 && <section className="test-section">
         <header className="test-heading">
           <h2>Test Cases</h2>
           <span>{snippet.tests.length}</span>
@@ -95,7 +95,7 @@ export default function SnippetPage({ loaderData }: Route.ComponentProps) {
             </section>
           ))}
         </div>
-      </section>
+      </section>}
     </article>
   </AppShell>;
 }

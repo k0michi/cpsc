@@ -176,9 +176,7 @@ for (const [path, source] of Object.entries(testFiles)) {
 }
 
 export const snippets: Snippet[] = parsedSnippets.map((snippet) => {
-  const tests = testsBySnippet.get(snippet.slug);
-  if (!tests) throw new Error(`Tests are missing for snippet: ${snippet.slug}`);
-  return { ...snippet, tests };
+  return { ...snippet, tests: testsBySnippet.get(snippet.slug) ?? [] };
 });
 
 export const categories = Array.from(
