@@ -29,6 +29,28 @@ export default function SnippetPage({ loaderData }: Route.ComponentProps) {
           if (block.type === "text") {
             return <TextBlock source={block.source} key={`text:${index}`} />;
           }
+          if (block.type === "dependency") {
+            return (
+              <details className="dependency-block" key={`dependency:${index}`}>
+                <summary>
+                  <span>DEPENDENCY</span>
+                  {block.title}
+                  <code>{block.sourceFile}</code>
+                </summary>
+                <div className="dependency-content">
+                  <MarkdownContent
+                    source={block.description}
+                    className="subsnippet-description"
+                  />
+                  <CodeBlock
+                    code={block.code}
+                    filename={block.sourceFile}
+                    language={snippet.language}
+                  />
+                </div>
+              </details>
+            );
+          }
           const subsnippet = snippet.subsnippets[block.subsnippetIndex];
           return (
           <section className="subsnippet" key={`code:${block.subsnippetIndex}`}>

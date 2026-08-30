@@ -33,7 +33,14 @@ export type Subsnippet = {
 
 export type SnippetBlock =
   | { type: "text"; source: string }
-  | { type: "code"; subsnippetIndex: number };
+  | { type: "code"; subsnippetIndex: number }
+  | {
+      type: "dependency";
+      title: string;
+      description?: string | null;
+      code: string;
+      sourceFile: string;
+    };
 
 export type TestCase = {
   title: string;
@@ -57,6 +64,25 @@ const testFiles = import.meta.glob<string>("../../snippets/*.test.cc", {
 
 const frontmatterPattern =
   /^\/\* cpsc:meta:start\r?\n([\s\S]*?)\r?\ncpsc:meta:end \*\/\r?\n?/;
+const subsnippetPattern =
+  /^\/\/ cpsc:subsnippet:start (.+)\r?\n(?:\/\/ cpsc:subsnippet:description (.+)\r?\n)?([\s\S]*?)^\/\/ cpsc:subsnippet:end\s*$/gm;
+const dependencyPattern =
+  /^#include\s+"([^"]+)"\s*\/\/\s*cpsc:dependency\s+(.+)\r?$/gm;
+
+const snippetSourcesByFile = new Map(
+  Object.entries(snippetFiles).map(([path, source]) => [
+    path.split("/").at(-1) ?? path,
+    source,
+  ]),
+);
+
+function extractSubsnippets(source: string): Subsnippet[] {
+  return Array.from(source.matchAll(subsnippetPattern), (subsnippet) => ({
+    title: subsnippet[1].trim(),
+    description: subsnippet[2]?.trim() || null,
+    code: subsnippet[3].trim(),
+  }));
+}
 
 function parseSnippet(path: string, source: string): Omit<Snippet, "tests"> {
   const match = source.match(frontmatterPattern);
@@ -91,18 +117,30 @@ function parseSnippet(path: string, source: string): Omit<Snippet, "tests"> {
   const rawCode = source.slice(match[0].length).trimStart();
   const textBlockPattern =
     /\/\* cpsc:text:start\r?\n([\s\S]*?)\s*cpsc:text:end \*\//gm;
-  const subsnippetPattern =
-    /^\/\/ cpsc:subsnippet:start (.+)\r?\n(?:\/\/ cpsc:subsnippet:description (.+)\r?\n)?([\s\S]*?)^\/\/ cpsc:subsnippet:end\s*$/gm;
   const subsnippetMatches = Array.from(rawCode.matchAll(subsnippetPattern));
-  const subsnippets = subsnippetMatches.map((subsnippet) => ({
-      title: subsnippet[1].trim(),
-      description: subsnippet[2]?.trim() || null,
-      code: subsnippet[3].trim(),
-    }));
+  const subsnippets = extractSubsnippets(rawCode);
   if (subsnippets.length === 0) {
     throw new Error(`At least one subsnippet is required: ${path}`);
   }
   const textMatches = Array.from(rawCode.matchAll(textBlockPattern));
+  const dependencyMatches = Array.from(rawCode.matchAll(dependencyPattern));
+  const dependencies = dependencyMatches.map((dependency) => {
+    const sourceFile = dependency[1].trim();
+    const title = dependency[2].trim();
+    const dependencySource = snippetSourcesByFile.get(sourceFile);
+    if (!dependencySource) {
+      throw new Error(`Dependency file is missing: ${path} -> ${sourceFile}`);
+    }
+    const subsnippet = extractSubsnippets(dependencySource).find(
+      (candidate) => candidate.title === title,
+    );
+    if (!subsnippet) {
+      throw new Error(
+        `Dependency code block is missing: ${path} -> ${sourceFile}#${title}`,
+      );
+    }
+    return { ...subsnippet, sourceFile };
+  });
   const blocks: SnippetBlock[] = [
     ...textMatches.map((text) => ({
       type: "text" as const,
@@ -113,6 +151,11 @@ function parseSnippet(path: string, source: string): Omit<Snippet, "tests"> {
       type: "code" as const,
       subsnippetIndex,
       position: subsnippet.index,
+    })),
+    ...dependencyMatches.map((dependency, dependencyIndex) => ({
+      type: "dependency" as const,
+      ...dependencies[dependencyIndex],
+      position: dependency.index,
     })),
   ]
     .sort((a, b) => a.position - b.position)
