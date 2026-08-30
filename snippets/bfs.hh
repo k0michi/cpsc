@@ -56,15 +56,20 @@ template <std::integral N> struct BFSResult {
   }
 };
 
-template <std::integral N, typename G>
-[[nodiscard]] BFSResult<N> bfs(const G &g, N start) {
+template <std::integral N, typename G, std::ranges::input_range Starts>
+[[nodiscard]] BFSResult<N> bfs(const G &g, const Starts &starts) {
   BFSResult<N> result{
       .distance = std::vector<std::optional<N>>(g.size()),
       .previous = std::vector<std::optional<N>>(g.size()),
   };
   std::deque<N> deque;
-  result.distance[start] = 0;
-  deque.push_back(start);
+  for (auto &&start : starts) {
+    N vertex = static_cast<N>(start);
+    if (!result.distance[vertex].has_value()) {
+      result.distance[vertex] = N{};
+      deque.push_back(vertex);
+    }
+  }
 
   while (!deque.empty()) {
     N u = deque.front();
@@ -88,6 +93,7 @@ template <std::integral N, typename G>
   }
   return result;
 }
+
 // cpsc:subsnippet:end
 
 /* cpsc:text:start
@@ -99,12 +105,15 @@ template <std::integral N, typename G>
 
 ## Usage
 - 重みなしグラフでは通常のBFS、辺重みが `bool` のグラフでは0-1 BFSとして動作する
-- costを持たない辺の重みは1として扱う
+- weightを持たない辺の重みは1として扱う
 - 辺は整数、`.to` と `.weight` を持つ型、あるいは `{to, weight}` のtuple-like型に対応する
 - weightは `bool` へ変換し、falseを重み0、trueを重み1として扱う
 - `BFSResult<N>` の `distance[v]` は始点からの最短距離、`previous[v]` は最短経路上の直前頂点を表す
 - 未到達、または直前頂点がない場合は `std::nullopt`
 - `reachable(target)` で到達可能性を、`pathTo(target)` で始点からの経路を取得できる
+- `bfs<N>(g, starts)` のように始点をrangeで渡すと、多点始点BFSを行う
+- 単一始点は1要素のrangeとして渡す
+- `g[u]` は隣接コンテナへの参照だけでなく、その場で生成したコンテナを返してもよい
 - 頂点番号は0以上 `g.size()` 未満の連続した整数とする
-- 頂点と距離の型 `N` は、始点の型から推論するか `bfs<N>(g, start)` のように明示する
+- 頂点と距離の型 `N` は `bfs<N>(g, starts)` のように明示する
 cpsc:text:end */
