@@ -30,6 +30,8 @@ template <typename E> constexpr bool getEdgeWeightBool(const E &e) {
     return static_cast<bool>(e.weight);
   } else if constexpr (requires { std::get<1>(e); }) {
     return static_cast<bool>(std::get<1>(e));
+  } else {
+    return true;
   }
 }
 
