@@ -51,9 +51,9 @@ TEST(Kruskal, HandlesEmptyAndSingleVertexGraphs) {
   using Edge = std::tuple<int, int, int>;
   std::vector<Edge> edges;
 
-  EXPECT_TRUE(kruskal<int, int>(0, edges).isConnected);
-  EXPECT_TRUE(kruskal<int, int>(1, edges).isConnected);
-  EXPECT_EQ(kruskal<int, int>(1, edges).totalWeight, 0);
+  EXPECT_TRUE((kruskal<int, int>(0, edges).isConnected));
+  EXPECT_TRUE((kruskal<int, int>(1, edges).isConnected));
+  EXPECT_EQ((kruskal<int, int>(1, edges).totalWeight), 0);
 }
 // cpsc:test:end
 
