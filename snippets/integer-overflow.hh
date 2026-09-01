@@ -21,6 +21,16 @@ cpsc:meta:end */
 #include <utility>
 
 // cpsc:subsnippet:start Integer Overflow Arithmetic
+template <std::integral T>
+  requires(!std::same_as<std::remove_cv_t<T>, bool>)
+[[nodiscard]] constexpr std::make_unsigned_t<T> absDiff(T left,
+                                                        T right) noexcept {
+  using U = std::make_unsigned_t<T>;
+  U leftBits = static_cast<U>(left);
+  U rightBits = static_cast<U>(right);
+  return left < right ? rightBits - leftBits : leftBits - rightBits;
+}
+
 template <std::integral T, std::integral U>
   requires(!std::same_as<std::remove_cv_t<T>, bool> &&
            !std::same_as<std::remove_cv_t<U>, bool> &&
@@ -31,24 +41,13 @@ template <std::integral T, std::integral U>
   using Unsigned = std::make_unsigned_t<T>;
   Unsigned bits = static_cast<Unsigned>(left) + static_cast<Unsigned>(right);
   T result = static_cast<T>(bits);
-  bool overflow;
-  if constexpr (std::same_as<T, U> && std::unsigned_integral<T>) {
-    overflow = left > std::numeric_limits<T>::max() - right;
-  } else if constexpr (std::same_as<T, U>) {
-    overflow = (right > 0 && left > std::numeric_limits<T>::max() - right) ||
-               (right < 0 && left < std::numeric_limits<T>::lowest() - right);
-  } else if constexpr (std::signed_integral<T>) {
-    Unsigned room = static_cast<Unsigned>(std::numeric_limits<T>::max()) +
-                    (Unsigned{} - static_cast<Unsigned>(left));
-    overflow = right > room;
-  } else if (right >= 0) {
-    Unsigned amount = static_cast<Unsigned>(right);
-    overflow = amount > std::numeric_limits<T>::max() - left;
+  if constexpr (std::signed_integral<T> && std::signed_integral<U>) {
+    return {result, ((left ^ result) & (right ^ result)) < 0};
+  } else if constexpr (std::unsigned_integral<T> && std::signed_integral<U>) {
+    return {result, right >= 0 ? result < left : result > left};
   } else {
-    Unsigned amount = Unsigned{} - static_cast<Unsigned>(right);
-    overflow = amount > left;
+    return {result, result < left};
   }
-  return {result, overflow};
 }
 
 template <std::integral T, std::integral U>
@@ -61,24 +60,13 @@ template <std::integral T, std::integral U>
   using Unsigned = std::make_unsigned_t<T>;
   Unsigned bits = static_cast<Unsigned>(left) - static_cast<Unsigned>(right);
   T result = static_cast<T>(bits);
-  bool overflow;
-  if constexpr (std::same_as<T, U> && std::unsigned_integral<T>) {
-    overflow = left < right;
-  } else if constexpr (std::same_as<T, U>) {
-    overflow = (right > 0 && left < std::numeric_limits<T>::lowest() + right) ||
-               (right < 0 && left > std::numeric_limits<T>::max() + right);
-  } else if constexpr (std::signed_integral<T>) {
-    Unsigned room = static_cast<Unsigned>(left) -
-                    static_cast<Unsigned>(std::numeric_limits<T>::lowest());
-    overflow = right > room;
-  } else if (right >= 0) {
-    Unsigned amount = static_cast<Unsigned>(right);
-    overflow = amount > left;
+  if constexpr (std::signed_integral<T> && std::signed_integral<U>) {
+    return {result, ((left ^ right) & (left ^ result)) < 0};
+  } else if constexpr (std::unsigned_integral<T> && std::signed_integral<U>) {
+    return {result, right >= 0 ? result > left : result < left};
   } else {
-    Unsigned amount = Unsigned{} - static_cast<Unsigned>(right);
-    overflow = amount > std::numeric_limits<T>::max() - left;
+    return {result, result > left};
   }
-  return {result, overflow};
 }
 
 template <std::integral T>
@@ -91,12 +79,12 @@ template <std::integral T>
   bool overflow = false;
   if constexpr (std::unsigned_integral<T>) {
     overflow = right != 0 && left > std::numeric_limits<T>::max() / right;
-  } else if (left > 0) {
-    overflow = (right > 0 && left > std::numeric_limits<T>::max() / right) ||
-               (right < 0 && right < std::numeric_limits<T>::lowest() / left);
-  } else if (left < 0) {
-    overflow = (right > 0 && left < std::numeric_limits<T>::lowest() / right) ||
-               (right < 0 && right < std::numeric_limits<T>::max() / left);
+  } else {
+    U leftMagnitude = absDiff(left, T{});
+    U rightMagnitude = absDiff(right, T{});
+    bool negative = (left < 0) != (right < 0);
+    U limit = static_cast<U>(std::numeric_limits<T>::max()) + U{negative};
+    overflow = rightMagnitude != 0 && leftMagnitude > limit / rightMagnitude;
   }
   return {result, overflow};
 }

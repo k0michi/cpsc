@@ -8,6 +8,23 @@ cpsc:meta:end */
 #include <cstdint>
 
 // cpsc:test:start
+TEST(IntegerOverflow, ComputesAbsoluteDifferenceWithoutOverflow) {
+  constexpr int minimum = std::numeric_limits<int>::min();
+  constexpr int maximum = std::numeric_limits<int>::max();
+
+  static_assert(absDiff(20, 62) == 42U);
+  static_assert(absDiff(62, 20) == 42U);
+  static_assert(absDiff(minimum, 0) ==
+                static_cast<unsigned int>(maximum) + 1U);
+  static_assert(absDiff(minimum, maximum) ==
+                std::numeric_limits<unsigned int>::max());
+  static_assert(absDiff(0U, std::numeric_limits<unsigned int>::max()) ==
+                std::numeric_limits<unsigned int>::max());
+  SUCCEED();
+}
+// cpsc:test:end
+
+// cpsc:test:start
 TEST(CheckedIntegerArithmetic, DetectsOverflowWithoutEvaluatingIt) {
   constexpr int minimum = std::numeric_limits<int>::min();
   constexpr int maximum = std::numeric_limits<int>::max();
@@ -127,6 +144,57 @@ TEST(IntegerOverflow, SupportsConstantEvaluation) {
   static_assert(saturatingCast<std::int8_t>(1000) == 127);
   static_assert(wrappingCast<std::int8_t>(255) == -1);
   SUCCEED();
+}
+// cpsc:test:end
+
+// cpsc:test:start
+TEST(IntegerOverflow, ExhaustivelyChecksEightBitArithmetic) {
+  for (int left = std::numeric_limits<std::int8_t>::min();
+       left <= std::numeric_limits<std::int8_t>::max(); ++left) {
+    for (int right = std::numeric_limits<std::int8_t>::min();
+         right <= std::numeric_limits<std::int8_t>::max(); ++right) {
+      auto check = [](auto actual, int exact) {
+        bool overflow = !std::in_range<std::int8_t>(exact);
+        EXPECT_EQ(actual,
+                  (std::pair{static_cast<std::int8_t>(exact), overflow}));
+      };
+      auto lhs = static_cast<std::int8_t>(left);
+      auto rhs = static_cast<std::int8_t>(right);
+      check(overflowingAdd(lhs, rhs), left + right);
+      check(overflowingSub(lhs, rhs), left - right);
+      check(overflowingMul(lhs, rhs), left * right);
+    }
+  }
+}
+// cpsc:test:end
+
+// cpsc:test:start
+TEST(IntegerOverflow, ExhaustivelyChecksMixedSignEightBitArithmetic) {
+  auto checkSigned = [](auto actual, int exact) {
+    bool overflow = !std::in_range<std::int8_t>(exact);
+    EXPECT_EQ(actual, (std::pair{static_cast<std::int8_t>(exact), overflow}));
+  };
+  auto checkUnsigned = [](auto actual, int exact) {
+    bool overflow = !std::in_range<std::uint8_t>(exact);
+    EXPECT_EQ(actual, (std::pair{static_cast<std::uint8_t>(exact), overflow}));
+  };
+  for (int signedValue = std::numeric_limits<std::int8_t>::min();
+       signedValue <= std::numeric_limits<std::int8_t>::max(); ++signedValue) {
+    for (int unsignedValue = std::numeric_limits<std::uint8_t>::min();
+         unsignedValue <= std::numeric_limits<std::uint8_t>::max();
+         ++unsignedValue) {
+      auto signedOperand = static_cast<std::int8_t>(signedValue);
+      auto unsignedOperand = static_cast<std::uint8_t>(unsignedValue);
+      checkSigned(overflowingAdd(signedOperand, unsignedOperand),
+                  signedValue + unsignedValue);
+      checkSigned(overflowingSub(signedOperand, unsignedOperand),
+                  signedValue - unsignedValue);
+      checkUnsigned(overflowingAdd(unsignedOperand, signedOperand),
+                    unsignedValue + signedValue);
+      checkUnsigned(overflowingSub(unsignedOperand, signedOperand),
+                    unsignedValue - signedValue);
+    }
+  }
 }
 // cpsc:test:end
 
