@@ -39,15 +39,11 @@ template <std::integral T, std::integral U>
 [[nodiscard]] constexpr std::pair<T, bool> overflowingAdd(T left,
                                                           U right) noexcept {
   using Unsigned = std::make_unsigned_t<T>;
-  Unsigned bits = static_cast<Unsigned>(left) + static_cast<Unsigned>(right);
-  T result = static_cast<T>(bits);
-  if constexpr (std::signed_integral<T> && std::signed_integral<U>) {
-    return {result, ((left ^ result) & (right ^ result)) < 0};
-  } else if constexpr (std::unsigned_integral<T> && std::signed_integral<U>) {
-    return {result, right >= 0 ? result < left : result > left};
-  } else {
-    return {result, result < left};
-  }
+  const Unsigned bits =
+      static_cast<Unsigned>(left) + static_cast<Unsigned>(right);
+  const T result = static_cast<T>(bits);
+  const bool isNegative = std::is_signed_v<U> && right < 0;
+  return {result, (result < left) != isNegative};
 }
 
 template <std::integral T, std::integral U>
@@ -58,15 +54,11 @@ template <std::integral T, std::integral U>
 [[nodiscard]] constexpr std::pair<T, bool> overflowingSub(T left,
                                                           U right) noexcept {
   using Unsigned = std::make_unsigned_t<T>;
-  Unsigned bits = static_cast<Unsigned>(left) - static_cast<Unsigned>(right);
-  T result = static_cast<T>(bits);
-  if constexpr (std::signed_integral<T> && std::signed_integral<U>) {
-    return {result, ((left ^ right) & (left ^ result)) < 0};
-  } else if constexpr (std::unsigned_integral<T> && std::signed_integral<U>) {
-    return {result, right >= 0 ? result > left : result < left};
-  } else {
-    return {result, result > left};
-  }
+  const Unsigned bits =
+      static_cast<Unsigned>(left) - static_cast<Unsigned>(right);
+  const T result = static_cast<T>(bits);
+  const bool isNegative = std::is_signed_v<U> && right < 0;
+  return {result, (result > left) != isNegative};
 }
 
 template <std::integral T>
