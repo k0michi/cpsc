@@ -15,9 +15,9 @@ TEST(LazySegmentTree, AppliesRangeUpdatesAndQueriesProducts) {
   };
   auto composition = [](long long f, long long g) { return f + g; };
   std::vector<T> values{{1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}};
-  LazySegmentTree<T, decltype(op), long long, decltype(mapping),
+  LazySegmentTree<T, long long, decltype(op), decltype(mapping),
                   decltype(composition)>
-      tree(values, op, mapping, composition, T{0, 0}, 0);
+      tree(values, T{0, 0}, 0, op, mapping, composition);
 
   EXPECT_EQ(tree.product(0, 5).first, 15);
   tree.apply(1, 4, 10);
@@ -46,8 +46,8 @@ TEST(LazySegmentTree, ComposesPendingActionsInOrder) {
     return F{f.first * g.first, f.first * g.second + f.second};
   };
   std::vector<T> values{{1, 1}, {2, 1}, {3, 1}, {4, 1}};
-  LazySegmentTree<T, decltype(op), F, decltype(mapping), decltype(composition)>
-      tree(values, op, mapping, composition, T{0, 0}, F{1, 0});
+  LazySegmentTree<T, F, decltype(op), decltype(mapping), decltype(composition)>
+      tree(values, T{0, 0}, F{1, 0}, op, mapping, composition);
 
   tree.apply(0, 4, F{2, 1});
   tree.apply(0, 4, F{1, 3});
@@ -68,9 +68,9 @@ TEST(LazySegmentTree, FindsPartitionPointsAfterLazyUpdates) {
   };
   auto composition = [](long long f, long long g) { return f + g; };
   std::vector<T> values{{2, 1}, {1, 1}, {3, 1}, {4, 1}, {2, 1}};
-  LazySegmentTree<T, decltype(op), long long, decltype(mapping),
+  LazySegmentTree<T, long long, decltype(op), decltype(mapping),
                   decltype(composition)>
-      tree(values, op, mapping, composition, T{0, 0}, 0);
+      tree(values, T{0, 0}, 0, op, mapping, composition);
 
   tree.apply(1, 4, 1);
   auto atMostEight = [](T value) { return value.first <= 8; };
@@ -92,7 +92,7 @@ TEST(LazySegmentTree, HandlesEmptySingletonAndClear) {
              value.second};
   };
   auto composition = [](long long f, long long g) { return f + g; };
-  using Tree = LazySegmentTree<T, decltype(op), long long, decltype(mapping),
+  using Tree = LazySegmentTree<T, long long, decltype(op), decltype(mapping),
                                decltype(composition)>;
 
   Tree empty;
@@ -100,11 +100,48 @@ TEST(LazySegmentTree, HandlesEmptySingletonAndClear) {
   EXPECT_EQ(empty.product(0, 0), (T{0, 0}));
   EXPECT_EQ(empty.allProduct(), (T{0, 0}));
 
-  Tree tree(std::vector<T>{{7, 1}}, op, mapping, composition, T{0, 0}, 0);
+  Tree tree(std::vector<T>{{7, 1}}, T{0, 0}, 0, op, mapping, composition);
   tree.apply(0, 1, 5);
   EXPECT_EQ(tree.get(0), (T{12, 1}));
   tree.clear();
   EXPECT_EQ(tree.get(0), (T{0, 0}));
   EXPECT_EQ(tree.allProduct(), (T{0, 0}));
+}
+// cpsc:test:end
+
+// cpsc:test:start
+TEST(LazySegmentTree, DefaultConstructsCapturelessOperations) {
+  auto op = [](long long a, long long b) { return std::max(a, b); };
+  auto mapping = [](long long f, long long value) { return f + value; };
+  auto composition = [](long long f, long long g) { return f + g; };
+  using Tree = LazySegmentTree<long long, long long, decltype(op),
+                               decltype(mapping), decltype(composition)>;
+
+  Tree tree(4);
+  tree.apply(1, 4, 3);
+
+  EXPECT_EQ(tree.product(0, 4), 3);
+  EXPECT_EQ(tree.get(0), 0);
+  EXPECT_EQ(tree.get(2), 3);
+
+  Tree initialized(3, 5);
+  EXPECT_EQ(initialized.product(0, 3), 5);
+}
+// cpsc:test:end
+
+// cpsc:test:start
+TEST(LazySegmentTree, DeducesTypesFromSizeAndRange) {
+  auto op = [](int a, int b) { return std::max(a, b); };
+  auto mapping = [](int f, int value) { return f + value; };
+  auto composition = [](int f, int g) { return f + g; };
+
+  LazySegmentTree sized(std::size_t{3}, 0, 0, 0, op, mapping, composition);
+  sized.apply(0, 2, 4);
+  EXPECT_EQ(sized.allProduct(), 4);
+
+  std::deque<int> values{1, 5, 2};
+  LazySegmentTree ranged(values, 0, 0, op, mapping, composition);
+  ranged.apply(2, 3, 6);
+  EXPECT_EQ(ranged.product(0, 3), 8);
 }
 // cpsc:test:end

@@ -13,8 +13,7 @@ cpsc:meta:end */
 #pragma once
 
 // cpsc:subsnippet:start LazySegmentTree
-template <typename T, typename Op, typename F, typename Mapping,
-          typename Composition>
+template <typename T, typename F, typename Op, typename Map, typename Compose>
 class LazySegmentTree {
 public:
   using value_type = T;
@@ -28,19 +27,31 @@ private:
   std::vector<value_type> tree_;
   std::vector<operator_type> lazy_;
   [[no_unique_address]] Op op_;
-  [[no_unique_address]] Mapping mapping_;
-  [[no_unique_address]] Composition composition_;
+  [[no_unique_address]] Map map_;
+  [[no_unique_address]] Compose compose_;
   value_type unit_;
   operator_type identity_;
+
+  template <std::ranges::input_range R>
+  static std::vector<value_type> toVector(R &&range) {
+    std::vector<value_type> values;
+    if constexpr (std::ranges::sized_range<R>) {
+      values.reserve(std::ranges::size(range));
+    }
+    for (auto &&value : range) {
+      values.emplace_back(std::forward<decltype(value)>(value));
+    }
+    return values;
+  }
 
   void update(size_type index) {
     tree_[index] = op_(tree_[2 * index], tree_[2 * index + 1]);
   }
 
   void allApply(size_type index, const operator_type &f) {
-    tree_[index] = mapping_(f, tree_[index]);
+    tree_[index] = map_(f, tree_[index]);
     if (index < leafCount_) {
-      lazy_[index] = composition_(f, lazy_[index]);
+      lazy_[index] = compose_(f, lazy_[index]);
     }
   }
 
@@ -51,24 +62,25 @@ private:
   }
 
 public:
-  LazySegmentTree()
-      : LazySegmentTree(0, Op{}, Mapping{}, Composition{}, value_type{},
-                        operator_type{}) {}
+  LazySegmentTree() : LazySegmentTree(0) {}
 
-  explicit LazySegmentTree(size_type n, Op op, Mapping mapping,
-                           Composition composition, value_type unit,
-                           operator_type identity)
-      : LazySegmentTree(std::vector<value_type>(n, unit), op, mapping,
-                        composition, unit, identity) {}
+  explicit LazySegmentTree(size_type n, value_type initialValue = value_type{},
+                           value_type unit = value_type{},
+                           operator_type identity = operator_type{},
+                           Op op = Op{}, Map map = Map{},
+                           Compose compose = Compose{})
+      : LazySegmentTree(std::vector<value_type>(n, initialValue), unit,
+                        identity, op, map, compose) {}
 
-  explicit LazySegmentTree(const std::vector<value_type> &v, Op op,
-                           Mapping mapping, Composition composition,
-                           value_type unit, operator_type identity)
+  explicit LazySegmentTree(const std::vector<value_type> &v,
+                           value_type unit = value_type{},
+                           operator_type identity = operator_type{},
+                           Op op = Op{}, Map map = Map{},
+                           Compose compose = Compose{})
       : length_(v.size()), leafCount_(std::bit_ceil(length_)),
         height_(static_cast<size_type>(std::countr_zero(leafCount_))),
         tree_(2 * leafCount_, unit), lazy_(leafCount_, identity), op_(op),
-        mapping_(mapping), composition_(composition), unit_(unit),
-        identity_(identity) {
+        map_(map), compose_(compose), unit_(unit), identity_(identity) {
     for (size_type i = 0; i < length_; ++i) {
       tree_[leafCount_ + i] = v[i];
     }
@@ -76,6 +88,16 @@ public:
       update(i);
     }
   }
+
+  template <std::ranges::input_range R>
+    requires(!std::same_as<std::remove_cvref_t<R>, std::vector<value_type>> &&
+             std::convertible_to<std::ranges::range_reference_t<R>, value_type>)
+  explicit LazySegmentTree(R &&range, value_type unit = value_type{},
+                           operator_type identity = operator_type{},
+                           Op op = Op{}, Map map = Map{},
+                           Compose compose = Compose{})
+      : LazySegmentTree(toVector(std::forward<R>(range)), unit, identity, op,
+                        map, compose) {}
 
   void set(size_type index, const value_type &value) {
     assert(index < length_);
@@ -145,7 +167,7 @@ public:
     for (size_type i = height_; i >= 1; --i) {
       push(index >> i);
     }
-    tree_[index] = mapping_(f, tree_[index]);
+    tree_[index] = map_(f, tree_[index]);
     for (size_type i = 1; i <= height_; ++i) {
       update(index >> i);
     }
@@ -296,6 +318,15 @@ public:
     return length_ == 0;
   }
 };
+
+template <typename T, typename F, typename Op, typename Map, typename Compose>
+LazySegmentTree(std::size_t, T, T, F, Op, Map, Compose)
+    -> LazySegmentTree<T, F, Op, Map, Compose>;
+
+template <std::ranges::input_range R, typename T, typename F, typename Op,
+          typename Map, typename Compose>
+LazySegmentTree(R &&, T, F, Op, Map, Compose)
+    -> LazySegmentTree<T, F, Op, Map, Compose>;
 // cpsc:subsnippet:end
 
 /* cpsc:text:start
