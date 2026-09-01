@@ -189,10 +189,22 @@ TEST(IntegerOverflow, ExhaustivelyChecksMixedSignEightBitArithmetic) {
                   signedValue + unsignedValue);
       checkSigned(overflowingSub(signedOperand, unsignedOperand),
                   signedValue - unsignedValue);
+      checkSigned(overflowingMul(signedOperand, unsignedOperand),
+                  signedValue * unsignedValue);
+      if (unsignedOperand != 0) {
+        checkSigned(overflowingDiv(signedOperand, unsignedOperand),
+                    signedValue / unsignedValue);
+      }
       checkUnsigned(overflowingAdd(unsignedOperand, signedOperand),
                     unsignedValue + signedValue);
       checkUnsigned(overflowingSub(unsignedOperand, signedOperand),
                     unsignedValue - signedValue);
+      checkUnsigned(overflowingMul(unsignedOperand, signedOperand),
+                    unsignedValue * signedValue);
+      if (signedOperand != 0) {
+        checkUnsigned(overflowingDiv(unsignedOperand, signedOperand),
+                      unsignedValue / signedValue);
+      }
     }
   }
 }

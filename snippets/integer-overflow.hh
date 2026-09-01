@@ -61,36 +61,64 @@ template <std::integral T, std::integral U>
   return {result, (result > left) != isNegative};
 }
 
-template <std::integral T>
-  requires(!std::same_as<std::remove_cv_t<T>, bool>)
+template <std::integral T, std::integral U>
+  requires(!std::same_as<std::remove_cv_t<T>, bool> &&
+           !std::same_as<std::remove_cv_t<U>, bool> &&
+           (std::same_as<T, U> || std::same_as<U, std::make_unsigned_t<T>> ||
+            std::same_as<U, std::make_signed_t<T>>))
 [[nodiscard]] constexpr std::pair<T, bool> overflowingMul(T left,
-                                                          T right) noexcept {
-  using U = std::make_unsigned_t<T>;
-  U bits = static_cast<U>(left) * static_cast<U>(right);
+                                                          U right) noexcept {
+  using Unsigned = std::make_unsigned_t<T>;
+  Unsigned bits =
+      static_cast<Unsigned>(left) * static_cast<Unsigned>(right);
   T result = static_cast<T>(bits);
-  bool overflow = false;
-  if constexpr (std::unsigned_integral<T>) {
-    overflow = right != 0 && left > std::numeric_limits<T>::max() / right;
+  if constexpr (std::unsigned_integral<T> && std::unsigned_integral<U>) {
+    return {result,
+            right != 0 && left > std::numeric_limits<T>::max() / right};
   } else {
-    U leftMagnitude = absDiff(left, T{});
-    U rightMagnitude = absDiff(right, T{});
-    bool negative = (left < 0) != (right < 0);
-    U limit = static_cast<U>(std::numeric_limits<T>::max()) + U{negative};
-    overflow = rightMagnitude != 0 && leftMagnitude > limit / rightMagnitude;
-  }
-  return {result, overflow};
-}
-
-template <std::integral T>
-  requires(!std::same_as<std::remove_cv_t<T>, bool>)
-[[nodiscard]] constexpr std::pair<T, bool> overflowingDiv(T left, T right) {
-  assert(right != 0);
-  if constexpr (std::signed_integral<T>) {
-    if (left == std::numeric_limits<T>::lowest() && right == T{-1}) {
-      return {left, true};
+    Unsigned leftMagnitude = absDiff(left, T{});
+    Unsigned rightMagnitude = absDiff(right, U{});
+    if (leftMagnitude == 0 || rightMagnitude == 0) {
+      return {result, false};
+    }
+    bool leftNegative = std::is_signed_v<T> && left < 0;
+    bool rightNegative = std::is_signed_v<U> && right < 0;
+    bool negative = leftNegative != rightNegative;
+    if constexpr (std::unsigned_integral<T>) {
+      if (negative) {
+        return {result, true};
+      }
+      return {result,
+              leftMagnitude >
+                  std::numeric_limits<T>::max() / rightMagnitude};
+    } else {
+      Unsigned limit = static_cast<Unsigned>(std::numeric_limits<T>::max()) +
+                       Unsigned{negative};
+      return {result, leftMagnitude > limit / rightMagnitude};
     }
   }
-  return {static_cast<T>(left / right), false};
+}
+
+template <std::integral T, std::integral U>
+  requires(!std::same_as<std::remove_cv_t<T>, bool> &&
+           !std::same_as<std::remove_cv_t<U>, bool> &&
+           (std::same_as<T, U> || std::same_as<U, std::make_unsigned_t<T>> ||
+            std::same_as<U, std::make_signed_t<T>>))
+[[nodiscard]] constexpr std::pair<T, bool> overflowingDiv(T left, U right) {
+  assert(right != 0);
+  using Unsigned = std::make_unsigned_t<T>;
+  Unsigned leftMagnitude = absDiff(left, T{});
+  Unsigned rightMagnitude = absDiff(right, U{});
+  Unsigned quotient = leftMagnitude / rightMagnitude;
+  bool leftNegative = std::is_signed_v<T> && left < 0;
+  bool rightNegative = std::is_signed_v<U> && right < 0;
+  bool negative = quotient != 0 && leftNegative != rightNegative;
+  Unsigned bits = negative ? Unsigned{} - quotient : quotient;
+  T result = static_cast<T>(bits);
+  Unsigned limit = static_cast<Unsigned>(std::numeric_limits<T>::max()) +
+                   Unsigned{std::is_signed_v<T> && negative};
+  bool overflow = quotient > limit || (std::is_unsigned_v<T> && negative);
+  return {result, overflow};
 }
 
 template <std::integral T>
