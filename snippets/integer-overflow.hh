@@ -69,12 +69,10 @@ template <std::integral T, std::integral U>
 [[nodiscard]] constexpr std::pair<T, bool> overflowingMul(T left,
                                                           U right) noexcept {
   using Unsigned = std::make_unsigned_t<T>;
-  Unsigned bits =
-      static_cast<Unsigned>(left) * static_cast<Unsigned>(right);
+  Unsigned bits = static_cast<Unsigned>(left) * static_cast<Unsigned>(right);
   T result = static_cast<T>(bits);
   if constexpr (std::unsigned_integral<T> && std::unsigned_integral<U>) {
-    return {result,
-            right != 0 && left > std::numeric_limits<T>::max() / right};
+    return {result, right != 0 && left > std::numeric_limits<T>::max() / right};
   } else {
     Unsigned leftMagnitude = absDiff(left, T{});
     Unsigned rightMagnitude = absDiff(right, U{});
@@ -89,8 +87,7 @@ template <std::integral T, std::integral U>
         return {result, true};
       }
       return {result,
-              leftMagnitude >
-                  std::numeric_limits<T>::max() / rightMagnitude};
+              leftMagnitude > std::numeric_limits<T>::max() / rightMagnitude};
     } else {
       Unsigned limit = static_cast<Unsigned>(std::numeric_limits<T>::max()) +
                        Unsigned{negative};

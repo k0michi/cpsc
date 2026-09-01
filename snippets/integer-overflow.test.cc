@@ -14,8 +14,7 @@ TEST(IntegerOverflow, ComputesAbsoluteDifferenceWithoutOverflow) {
 
   static_assert(absDiff(20, 62) == 42U);
   static_assert(absDiff(62, 20) == 42U);
-  static_assert(absDiff(minimum, 0) ==
-                static_cast<unsigned int>(maximum) + 1U);
+  static_assert(absDiff(minimum, 0) == static_cast<unsigned int>(maximum) + 1U);
   static_assert(absDiff(minimum, maximum) ==
                 std::numeric_limits<unsigned int>::max());
   static_assert(absDiff(0U, std::numeric_limits<unsigned int>::max()) ==
