@@ -12,17 +12,9 @@ cpsc:meta:end */
 
 #pragma once
 
-// cpsc:subsnippet:start Chinese Remainder Theorem
-constexpr std::tuple<long long, long long, long long> extendedGCD(long long a,
-                                                                  long long b) {
-  if (b == 0) {
-    return {a, 1, 0};
-  }
-  auto [gcd, y, x] = extendedGCD(b, a % b);
-  y -= a / b * x;
-  return {gcd, x, y};
-}
+#include "extended-gcd.hh" // cpsc:dependency extendedGCD
 
+// cpsc:subsnippet:start Chinese Remainder Theorem
 constexpr std::optional<std::pair<long long, long long>>
 crt(long long r1, long long m1, long long r2, long long m2) {
   long long rem1 = (r1 % m1 + m1) % m1;

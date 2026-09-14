@@ -12,18 +12,10 @@ cpsc:meta:end */
 
 #pragma once
 
+#include "extended-gcd.hh" // cpsc:dependency extendedGCD
+
 // cpsc:subsnippet:start ModInt
 // cpsc:subsnippet:description 拡張Euclid法を使い、値の正規化、四則演算、累乗、逆元を提供する。
-constexpr std::tuple<long long, long long, long long> extendedGCD(long long a,
-                                                                  long long b) {
-  if (b == 0) {
-    return {a, 1, 0};
-  }
-  auto [gcd, y, x] = extendedGCD(b, a % b);
-  y -= a / b * x;
-  return {gcd, x, y};
-}
-
 template <unsigned long long M> struct ModInt {
   static constexpr unsigned long long Modulus = M;
 

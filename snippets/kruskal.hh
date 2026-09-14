@@ -12,33 +12,10 @@ cpsc:meta:end */
 
 #pragma once
 
+#include "graph-utilities.hh" // cpsc:dependency Graph Utilities
 #include "union-find-tree.hh" // cpsc:dependency UnionFindTree
 
 // cpsc:subsnippet:start Kruskal's Algorithm
-template <typename E> constexpr auto getFullEdgeSource(const E &e) {
-  if constexpr (requires { e.from; }) {
-    return e.from;
-  } else if constexpr (requires { std::get<0>(e); }) {
-    return std::get<0>(e);
-  }
-}
-
-template <typename E> constexpr auto getFullEdgeTarget(const E &e) {
-  if constexpr (requires { e.to; }) {
-    return e.to;
-  } else if constexpr (requires { std::get<1>(e); }) {
-    return std::get<1>(e);
-  }
-}
-
-template <typename E> constexpr auto getFullEdgeCost(const E &e) {
-  if constexpr (requires { e.cost; }) {
-    return e.cost;
-  } else if constexpr (requires { std::get<2>(e); }) {
-    return std::get<2>(e);
-  }
-}
-
 template <typename C, typename E> struct KruskalResult {
   C totalWeight{};
   std::vector<E> edges;
@@ -72,20 +49,11 @@ kruskal(N vertexCount, Edges &&edges) {
 
   UnionFindTree unionFind(static_cast<std::size_t>(vertexCount));
 
-  auto isValidVertex = [vertexCount](N vertex) {
-    if constexpr (std::signed_integral<N>) {
-      if (vertex < N{}) {
-        return false;
-      }
-    }
-    return vertex < vertexCount;
-  };
-
   for (const E &edge : sortedEdges) {
     N source = static_cast<N>(getFullEdgeSource(edge));
     N target = static_cast<N>(getFullEdgeTarget(edge));
-    assert(isValidVertex(source));
-    assert(isValidVertex(target));
+    assert(isValidVertex(source, vertexCount));
+    assert(isValidVertex(target, vertexCount));
 
     if (unionFind
             .unite(static_cast<std::size_t>(source),

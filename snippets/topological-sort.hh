@@ -15,17 +15,9 @@ cpsc:meta:end */
 
 #pragma once
 
-// cpsc:subsnippet:start Topological Sort
-template <typename E> constexpr auto getEdgeTarget(const E &e) {
-  if constexpr (std::is_integral_v<std::decay_t<E>>) {
-    return e;
-  } else if constexpr (requires { e.to; }) {
-    return e.to;
-  } else if constexpr (requires { std::get<0>(e); }) {
-    return std::get<0>(e);
-  }
-}
+#include "graph-utilities.hh" // cpsc:dependency Graph Utilities
 
+// cpsc:subsnippet:start Topological Sort
 template <std::integral N, typename G>
 [[nodiscard]] std::optional<std::vector<N>> topologicalSort(const G &g) {
   N n = static_cast<N>(g.size());

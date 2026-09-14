@@ -8,6 +8,8 @@
     "dev": "react-router dev",
     "format:cpp": "clang-format -i snippets/*.hh snippets/*.cc",
     "format:cpp:check": "clang-format --dry-run --Werror snippets/*.hh snippets/*.cc",
+    "generate:all": "node --experimental-strip-types scripts/generate-all.ts",
+    "generate:all:check": "node --experimental-strip-types scripts/generate-all.ts --check",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
   },

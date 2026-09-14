@@ -49,7 +49,11 @@ export type TestCase = {
 };
 
 const snippetFiles = import.meta.glob<string>(
-  ["../../snippets/*.hh", "!../../snippets/test-support.hh"],
+  [
+    "../../snippets/*.hh",
+    "!../../snippets/all.hh",
+    "!../../snippets/test-support.hh",
+  ],
   {
     query: "?raw",
     import: "default",
@@ -172,6 +176,7 @@ function parseSnippet(path: string, source: string): Omit<Snippet, "tests"> {
 }
 
 const parsedSnippets = Object.entries(snippetFiles)
+  .filter(([path]) => !path.endsWith("/all.hh"))
   .map(([path, source]) => parseSnippet(path, source))
   .sort(
     (a, b) =>
@@ -191,7 +196,9 @@ const testsBySnippet = new Map<string, TestCase[]>();
 const testCasePattern =
   /^\/\/ cpsc:test:start\s*\r?\n([\s\S]*?)^\/\/ cpsc:test:end\s*$/gm;
 
-for (const [path, source] of Object.entries(testFiles)) {
+for (const [path, source] of Object.entries(testFiles).filter(
+  ([path]) => !path.endsWith("/all.test.cc"),
+)) {
   const frontmatter = source.match(frontmatterPattern);
   if (!frontmatter) throw new Error(`Test metadata is missing: ${path}`);
 

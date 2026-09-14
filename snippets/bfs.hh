@@ -12,29 +12,9 @@ cpsc:meta:end */
 
 #pragma once
 
+#include "graph-utilities.hh" // cpsc:dependency Graph Utilities
+
 // cpsc:subsnippet:start Breadth-First Search
-template <typename E> constexpr auto getEdgeTarget(const E &e) {
-  if constexpr (std::is_integral_v<std::decay_t<E>>) {
-    return e;
-  } else if constexpr (requires { e.to; }) {
-    return e.to;
-  } else if constexpr (requires { std::get<0>(e); }) {
-    return std::get<0>(e);
-  }
-}
-
-template <typename E> constexpr bool getEdgeWeightBool(const E &e) {
-  if constexpr (std::is_integral_v<std::decay_t<E>>) {
-    return true;
-  } else if constexpr (requires { e.weight; }) {
-    return static_cast<bool>(e.weight);
-  } else if constexpr (requires { std::get<1>(e); }) {
-    return static_cast<bool>(std::get<1>(e));
-  } else {
-    return true;
-  }
-}
-
 template <std::integral N> struct BFSResult {
   std::vector<std::optional<N>> distance;
   std::vector<std::optional<N>> previous;
@@ -48,13 +28,7 @@ template <std::integral N> struct BFSResult {
       return {};
     }
 
-    std::vector<N> path;
-    for (std::optional<N> current = target; current.has_value();
-         current = previous[*current]) {
-      path.push_back(*current);
-    }
-    std::reverse(path.begin(), path.end());
-    return path;
+    return restorePath(target, previous);
   }
 };
 

@@ -15,17 +15,9 @@ cpsc:meta:end */
 
 #pragma once
 
-// cpsc:subsnippet:start Strongly Connected Components
-template <typename E> constexpr auto getEdgeTarget(const E &e) {
-  if constexpr (std::is_integral_v<std::decay_t<E>>) {
-    return e;
-  } else if constexpr (requires { e.to; }) {
-    return e.to;
-  } else if constexpr (requires { std::get<0>(e); }) {
-    return std::get<0>(e);
-  }
-}
+#include "graph-utilities.hh" // cpsc:dependency Graph Utilities
 
+// cpsc:subsnippet:start Strongly Connected Components
 template <std::integral N, typename G>
 [[nodiscard]] std::vector<std::vector<N>>
 stronglyConnectedComponents(const G &g) {
