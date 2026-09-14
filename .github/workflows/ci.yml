@@ -18,10 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Install clang-format
+      - name: Install clang-format 19
         run: |
-          sudo apt-get update
-          sudo apt-get install --yes clang-format
+          wget --quiet https://apt.llvm.org/llvm.sh -O /tmp/llvm.sh
+          chmod +x /tmp/llvm.sh
+          sudo /tmp/llvm.sh 19
+          sudo apt-get install --yes clang-format-19
+          sudo ln --symbolic --force /usr/bin/clang-format-19 /usr/local/bin/clang-format
       - name: Check C++ formatting
         run: npm run format:cpp:check
       - name: Configure CMake
