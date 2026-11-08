@@ -47,6 +47,43 @@ TEST(ModInt, MultipliesWithoutUnsignedLongLongOverflow) {
 // cpsc:test:end
 
 // cpsc:test:start
+TEST(ModInt, MultipliesAcrossUint32ModulusBoundary) {
+  using Uint32Mint = ModInt<std::numeric_limits<std::uint32_t>::max()>;
+  using AboveUint32Mint =
+      ModInt<static_cast<unsigned long long>(
+                 std::numeric_limits<std::uint32_t>::max()) +
+             2>;
+
+  constexpr auto uint32Product =
+      Uint32Mint(Uint32Mint::Modulus - 2) * Uint32Mint(Uint32Mint::Modulus - 3);
+  constexpr auto aboveUint32Product =
+      AboveUint32Mint(AboveUint32Mint::Modulus - 2) *
+      AboveUint32Mint(AboveUint32Mint::Modulus - 3);
+
+  static_assert(uint32Product.val() == 6);
+  static_assert(aboveUint32Product.val() == 6);
+}
+// cpsc:test:end
+
+// cpsc:test:start
+TEST(ModInt, HandlesArithmeticNearLongLongMaximumModulus) {
+  using MaximumMint = ModInt<static_cast<unsigned long long>(
+      std::numeric_limits<long long>::max())>;
+
+  constexpr auto modulus = MaximumMint::Modulus;
+  static_assert((MaximumMint(modulus - 1) + MaximumMint(modulus - 1)).val() ==
+                modulus - 2);
+  static_assert((MaximumMint(1) - MaximumMint(2)).val() == modulus - 1);
+  static_assert((MaximumMint(modulus - 2) * MaximumMint(modulus - 3)).val() ==
+                6);
+
+  const MaximumMint inverse = MaximumMint(2).inv();
+  EXPECT_EQ((MaximumMint(2) * inverse).val(), 1);
+  EXPECT_EQ(inverse.val(), (modulus + 1) / 2);
+}
+// cpsc:test:end
+
+// cpsc:test:start
 TEST(ModInt, ComputesPowersAndInverses) {
   EXPECT_EQ(Mint(2).pow(10).toLLong(), 1024);
   EXPECT_EQ(Mint::pow(Mint(2), 10).toLLong(), 1024);
