@@ -58,3 +58,14 @@ TEST(ChineseRemainderTheorem, HandlesTrivialAndRepeatedCongruences) {
             std::nullopt);
 }
 // cpsc:test:end
+
+// cpsc:test:start
+TEST(ChineseRemainderTheorem, NormalizesNearLongLongLimitsWithoutOverflow) {
+  constexpr long long max = std::numeric_limits<long long>::max();
+
+  EXPECT_EQ(crt(max - 1, max, 0, 1),
+            (std::optional<std::pair<long long, long long>>{{max - 1, max}}));
+  EXPECT_EQ(crt(-max + 1, max, 0, 1),
+            (std::optional<std::pair<long long, long long>>{{1, max}}));
+}
+// cpsc:test:end

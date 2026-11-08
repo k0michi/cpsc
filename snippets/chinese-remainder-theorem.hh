@@ -17,8 +17,14 @@ cpsc:meta:end */
 // cpsc:subsnippet:start Chinese Remainder Theorem
 constexpr std::optional<std::pair<long long, long long>>
 crt(long long r1, long long m1, long long r2, long long m2) {
-  long long rem1 = (r1 % m1 + m1) % m1;
-  long long rem2 = (r2 % m2 + m2) % m2;
+  long long rem1 = r1 % m1;
+  long long rem2 = r2 % m2;
+  if (rem1 < 0) {
+    rem1 += m1;
+  }
+  if (rem2 < 0) {
+    rem2 += m2;
+  }
 
   auto [g, p, q] = extendedGCD(m1, m2);
 
