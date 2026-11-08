@@ -1,14 +1,22 @@
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const snippetsDirectory = resolve("snippets");
 const outputPath = resolve(snippetsDirectory, "all.hh");
 const check = process.argv.includes("--check");
 
-const snippetFiles = readdirSync(snippetsDirectory)
+const snippetFiles = execFileSync(
+  "git",
+  ["ls-tree", "-r", "--name-only", "-z", "HEAD", "--", "snippets"],
+  { encoding: "utf8" },
+)
+  .split("\0")
+  .map((path) => path.slice("snippets/".length))
   .filter(
     (filename) =>
       filename.endsWith(".hh") &&
+      !filename.includes("/") &&
       filename !== "all.hh" &&
       filename !== "test-support.hh",
   )
